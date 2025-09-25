@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - SoundForYou</title>
+    <meta name="description" content="Contact SoundForYou for professional audio services. Get in touch for quotes and consultations.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <div class="nav-brand">
+                <img src="assets/logo.svg" alt="SoundForYou" class="logo">
+                <span class="brand-name">SoundForYou</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
+                <li><a href="contact.html" class="nav-link active" aria-current="page">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <h1>Contact Us</h1>
+                <p class="page-intro">Ready to bring your audio project to life? Get in touch today.</p>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h2>Let's Work Together</h2>
+                        <p>Whether you need mixing, mastering, sound design, or complete audio production, we're here to help bring your vision to life.</p>
+                        
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <h3>Response Time</h3>
+                                <p>We typically respond within 24 hours</p>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <h3>Project Types</h3>
+                                <p>Music, podcasts, commercials, film, games, and more</p>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <h3>Consultation</h3>
+                                <p>Free initial consultation for all projects</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="contact-form" action="/api/contact" method="POST">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input type="text" id="name" name="name" required aria-describedby="name-error">
+                            <span id="name-error" class="error-message" role="alert"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required aria-describedby="email-error">
+                            <span id="email-error" class="error-message" role="alert"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service">Service of Interest</label>
+                            <select id="service" name="service">
+                                <option value="">Select a service (optional)</option>
+                                <option value="mixing">Audio Mixing</option>
+                                <option value="mastering">Audio Mastering</option>
+                                <option value="sound-design">Sound Design</option>
+                                <option value="production">Audio Production</option>
+                                <option value="consultation">Consultation</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="project-type">Project Type</label>
+                            <input type="text" id="project-type" name="project-type" placeholder="e.g., album, podcast, commercial">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="timeline">Timeline</label>
+                            <input type="text" id="timeline" name="timeline" placeholder="e.g., within 2 weeks, flexible">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" required rows="5" 
+                                placeholder="Tell us about your project, budget, timeline, and any specific requirements..."
+                                aria-describedby="message-error"></textarea>
+                            <span id="message-error" class="error-message" role="alert"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <!-- Replace with your actual Turnstile site key from Cloudflare dashboard -->
+                            <div class="cf-turnstile" data-sitekey="0x4AAAAAAAYourSiteKeyHere" data-theme="light"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SoundForYou. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Basic form validation and submission handling
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            
+            // Basic validation
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            
+            let hasErrors = false;
+            
+            if (!name) {
+                document.getElementById('name-error').textContent = 'Name is required';
+                hasErrors = true;
+            }
+            
+            if (!email) {
+                document.getElementById('email-error').textContent = 'Email is required';
+                hasErrors = true;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('email-error').textContent = 'Please enter a valid email';
+                hasErrors = true;
+            }
+            
+            if (!message) {
+                document.getElementById('message-error').textContent = 'Message is required';
+                hasErrors = true;
+            }
+            
+            if (!hasErrors) {
+                // Submit the form
+                this.submit();
+            }
+        });
+    </script>
+</body>
+</html>
