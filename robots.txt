@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://soundforyou.pages.dev/sitemap.xml
+
+# Disallow search form result pages if any
+Disallow: /search
+Disallow: /*?*
+
+# Allow all assets
+Allow: /assets/
+Allow: /styles.css

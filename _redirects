@@ -1,0 +1,12 @@
+# Redirect trailing slashes to clean URLs
+/*/ /:splat 301
+
+# Redirect common variations to correct pages
+/home /
+/home/ /
+/service /services.html
+/service/ /services.html
+/services /services.html
+/contact-us /contact.html
+/contact-us/ /contact.html
+/get-in-touch /contact.html
