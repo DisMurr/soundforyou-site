@@ -1,92 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Services • SoundForYou</title>
-  <meta name="description" content="Sound equipment hire, wedding & party DJs, corporate AV, and live sound packages. Delivery, setup and on-site engineer available."/>
-  <link rel="stylesheet" href="/styles.css"/>
-</head>
-<body>
-  <header class="header">
-    <div class="container topbar">
-      <a class="brand" href="/"><img src="/assets/logo.svg" width="40" height="40" alt="SoundForYou"/><div><h1>SoundForYou</h1><small>Professional Sound Equipment Hire &amp; DJ Services</small></div></a>
-  <nav><a href="/">Home</a><a href="/services">Services</a><a href="/contact">Contact</a></nav>
-    </div>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Services • SoundForYou</title>
+    <meta
+      name="description"
+      content="Sound equipment hire, wedding & party DJs, corporate AV, and live sound packages. Delivery, setup and on-site engineer available."
+    />
+    <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="nav-container">
+        <a class="nav-brand" href="/">
+          <img src="/assets/logo.svg" alt="SoundForYou" class="logo" />
+          <span class="brand-name">SoundForYou</span>
+        </a>
+        <ul class="nav-links">
+          <li><a class="nav-link" href="/">Home</a></li>
+          <li><a class="nav-link active" href="/services" aria-current="page">Services</a></li>
+          <li><a class="nav-link" href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
 
-  <section class="section">
-    <div class="container">
-      <h2>Services & Equipment</h2>
-      <div class="grid-3" style="margin-top:14px;">
-        <div class="tile">
-          <h3>Sound Hire</h3>
-          <ul>
-            <li>PA systems (small to large)</li>
-            <li>Subwoofers, monitors, DI boxes</li>
-            <li>Mixers (digital/analogue)</li>
-            <li>Wireless & wired microphones</li>
-          </ul>
-        </div>
-        <div class="tile">
-          <h3>DJ Packages</h3>
-          <ul>
-            <li>Professional DJ for weddings & parties</li>
-            <li>Curated playlists & requests</li>
-            <li>MC option available</li>
-            <li>Lighting add-ons on request</li>
-          </ul>
-        </div>
-        <div class="tile">
-          <h3>Corporate & Live</h3>
-          <ul>
-            <li>Speeches, launches, award nights</li>
-            <li>Live acts & bands</li>
-            <li>On-site technician</li>
-            <li>24/7 event support</li>
-          </ul>
-        </div>
+    <section class="page-hero">
+      <div class="container">
+        <h1>Services & Equipment</h1>
+        <p class="page-intro">From compact parties to full corporate and live sound—we’ve got you covered.</p>
       </div>
+    </section>
 
-      <div class="tile" style="margin-top:16px;">
-        <h3 style="margin:0 0 8px;color:#1e3a5f;">Typical Packages</h3>
-        <table class="pricetable">
-          <thead><tr><th>Package</th><th>Includes</th><th>From</th></tr></thead>
-          <tbody>
-            <tr>
-              <td>Compact Party</td>
-              <td>2x tops, small mixer, 1x mic, pro DJ</td>
-              <td>€350</td>
-            </tr>
-            <tr>
-              <td>Wedding Evening</td>
-              <td>PA + DJ + MC + 2x wireless mics</td>
-              <td>€650</td>
-            </tr>
-            <tr>
-              <td>Corporate AV</td>
-              <td>PA, podium mic, playback, technician</td>
-              <td>€480</td>
-            </tr>
-            <tr>
-              <td>Live Sound</td>
-              <td>PA + subs, 3–5 mics, monitors, engineer</td>
-              <td>€550</td>
-            </tr>
-          </tbody>
-        </table>
+    <section class="services">
+      <div class="container">
+        <div class="services-grid">
+          <div class="service-card">
+            <h3>Sound Hire</h3>
+            <ul class="service-features">
+              <li>PA systems (small to large)</li>
+              <li>Subwoofers & stage monitors</li>
+              <li>Analogue & digital mixers</li>
+              <li>Wireless & wired microphones</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <h3>DJ Packages</h3>
+            <ul class="service-features">
+              <li>Pro DJ for weddings & parties</li>
+              <li>Curated playlists & requests</li>
+              <li>MC option available</li>
+              <li>Lighting add‑ons on request</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <h3>Corporate AV</h3>
+            <ul class="service-features">
+              <li>Speeches, launches & awards</li>
+              <li>Podium mics & playback</li>
+              <li>On‑site technician</li>
+              <li>Fast setup & teardown</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <h3>Live Sound</h3>
+            <ul class="service-features">
+              <li>PA + subs, 3–5 mics</li>
+              <li>Monitors & engineer</li>
+              <li>Band/act rider‑friendly</li>
+              <li>Soundcheck included</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2 style="margin-top:3rem;">Typical Packages</h2>
+        <div class="services-grid" style="margin-top:1rem;">
+          <div class="service-card">
+            <h3>Compact Party</h3>
+            <ul class="service-features">
+              <li>2x tops, small mixer</li>
+              <li>1x microphone</li>
+              <li>Professional DJ</li>
+            </ul>
+            <p class="price">From €350</p>
+          </div>
+          <div class="service-card">
+            <h3>Wedding Evening</h3>
+            <ul class="service-features">
+              <li>PA + DJ + MC</li>
+              <li>2x wireless microphones</li>
+              <li>Playlist curation & requests</li>
+            </ul>
+            <p class="price">From €650</p>
+          </div>
+          <div class="service-card">
+            <h3>Corporate AV</h3>
+            <ul class="service-features">
+              <li>PA, podium mic & playback</li>
+              <li>On‑site technician</li>
+              <li>Quick setup & teardown</li>
+            </ul>
+            <p class="price">From €480</p>
+          </div>
+          <div class="service-card">
+            <h3>Live Sound</h3>
+            <ul class="service-features">
+              <li>PA + subs, 3–5 mics</li>
+              <li>Monitors & engineer</li>
+              <li>Band/act ready</li>
+            </ul>
+            <p class="price">From €550</p>
+          </div>
+        </div>
+
         <p style="margin-top:10px;color:#6b7280;">Prices exclude travel outside Dublin; all equipment fully insured.</p>
+        <p style="margin-top:16px;"><a class="btn btn-primary" href="/contact">Request a Quote</a></p>
       </div>
+    </section>
 
-  <p style="margin-top:16px;"><a class="btn" href="/contact">Request a Quote</a></p>
-    </div>
-  </section>
+    <section class="cta-section">
+      <div class="container">
+        <h2>Tell us about your event</h2>
+        <p>We’ll recommend the right package and tailor a setup for your venue and audience.</p>
+        <a class="btn btn-primary" href="/contact">Get a Free Quote</a>
+      </div>
+    </section>
 
-  <footer class="footer">
-    <div class="container">
-      <strong>Thank you for your business</strong>
-      <small>www.soundforyou.ie • Serving Irish Premier Events Since 2008</small>
-    </div>
-  </footer>
-</body>
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 SoundForYou • Serving Irish Premier Events Since 2008</p>
+      </div>
+    </footer>
+  </body>
 </html>
