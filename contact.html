@@ -58,56 +58,57 @@
                     </div>
 
                     <form class="contact-form" action="/api/contact" method="POST">
-                        <div class="form-group">
-                            <label for="name">Name *</label>
-                            <input type="text" id="name" name="name" required aria-describedby="name-error">
-                            <span id="name-error" class="error-message" role="alert"></span>
-                        </div>
+  <div class="form-group">
+    <label for="name">Name *</label>
+    <input id="name" name="name" required />
+  </div>
 
-                        <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required aria-describedby="email-error">
-                            <span id="email-error" class="error-message" role="alert"></span>
-                        </div>
+  <div class="form-group">
+    <label for="email">Email *</label>
+    <input id="email" name="email" type="email" required />
+  </div>
 
-                        <div class="form-group">
-                            <label for="service">Service of Interest</label>
-                            <select id="service" name="service">
-                                <option value="">Select a service (optional)</option>
-                                <option value="mixing">Audio Mixing</option>
-                                <option value="mastering">Audio Mastering</option>
-                                <option value="sound-design">Sound Design</option>
-                                <option value="production">Audio Production</option>
-                                <option value="consultation">Consultation</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
+  <div class="form-group">
+    <label for="event_date">Event Date</label>
+    <input id="event_date" name="event_date" type="date" />
+  </div>
 
-                        <div class="form-group">
-                            <label for="project-type">Project Type</label>
-                            <input type="text" id="project-type" name="project-type" placeholder="e.g., album, podcast, commercial">
-                        </div>
+  <div class="form-group">
+    <label for="venue">Venue / Location</label>
+    <input id="venue" name="venue" placeholder="Hotel/venue name, town" />
+  </div>
 
-                        <div class="form-group">
-                            <label for="timeline">Timeline</label>
-                            <input type="text" id="timeline" name="timeline" placeholder="e.g., within 2 weeks, flexible">
-                        </div>
+  <div class="form-group">
+    <label for="audience">Approx. Guests</label>
+    <input id="audience" name="audience" inputmode="numeric" placeholder="e.g., 120" />
+  </div>
 
-                        <div class="form-group">
-                            <label for="message">Message *</label>
-                            <textarea id="message" name="message" required rows="5" 
-                                placeholder="Tell us about your project, budget, timeline, and any specific requirements..."
-                                aria-describedby="message-error"></textarea>
-                            <span id="message-error" class="error-message" role="alert"></span>
-                        </div>
+  <div class="form-group">
+    <label for="package">Package</label>
+    <select id="package" name="package">
+      <option value="">Select (optional)</option>
+      <option>Compact Party</option>
+      <option>Wedding Evening</option>
+      <option>Corporate AV</option>
+      <option>Live Sound</option>
+      <option>Custom</option>
+    </select>
+  </div>
 
-                        <div class="form-group">
-                            <!-- Replace with your actual Turnstile site key from Cloudflare dashboard -->
-                            <div class="cf-turnstile" data-sitekey="0x4AAAAAAB3apl3c8BpLP5UO" data-theme="light"></div>
-                        </div>
+  <div class="form-group">
+    <label for="message">Message *</label>
+    <textarea id="message" name="message" rows="5" required placeholder="Tell us about timings, setup access, special requests…"></textarea>
+  </div>
 
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
+  <!-- Honeypot (spam trap) -->
+  <input type="text" name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;"/>
+
+  <!-- Turnstile -->
+  <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="light"></div>
+
+  <button type="submit" class="btn btn-primary">Send Message</button>
+</form>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
                 </div>
             </div>
         </section>
