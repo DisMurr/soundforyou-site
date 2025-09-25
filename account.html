@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Account • SoundForYou</title>
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml"/>
+  <link rel="stylesheet" href="/styles.css"/>
+</head>
+<body>
+  <header>
+    <nav class="nav-container">
+      <a class="nav-brand" href="/"><img class="logo" src="/assets/logo.svg" alt="SoundForYou"/><span class="brand-name">SoundForYou</span></a>
+      <ul class="nav-links">
+        <li><a class="nav-link" href="/">Home</a></li>
+        <li><a class="nav-link" href="/services">Services</a></li>
+        <li><a class="nav-link" href="/contact">Contact</a></li>
+        <li><a class="nav-link active" href="/account" aria-current="page">Account</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Account</h1>
+      <p class="page-intro">Register, sign in, and view your current session.</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+        <div>
+          <h2>Register</h2>
+          <form id="registerForm" class="contact-form" autocomplete="off">
+            <div class="form-group">
+              <label for="regEmail">Email</label>
+              <input id="regEmail" type="email" required />
+              <span class="error-message" id="regEmailErr"></span>
+            </div>
+            <div class="form-group">
+              <label for="regPw">Password (min 8 chars)</label>
+              <input id="regPw" type="password" minlength="8" required />
+              <span class="error-message" id="regPwErr"></span>
+            </div>
+            <button class="btn btn-primary" type="submit">Create Account</button>
+            <p id="regResult" style="margin-top:8px;color:#4b5563"></p>
+          </form>
+        </div>
+        <div>
+          <h2>Login</h2>
+          <form id="loginForm" class="contact-form" autocomplete="off">
+            <div class="form-group">
+              <label for="loginEmail">Email</label>
+              <input id="loginEmail" type="email" required />
+              <span class="error-message" id="loginEmailErr"></span>
+            </div>
+            <div class="form-group">
+              <label for="loginPw">Password</label>
+              <input id="loginPw" type="password" required />
+              <span class="error-message" id="loginPwErr"></span>
+            </div>
+            <button class="btn btn-primary" type="submit">Sign In</button>
+            <p id="loginResult" style="margin-top:8px;color:#4b5563"></p>
+          </form>
+          <div class="tile" style="margin-top:16px;padding:16px;border:1px solid #e5e7eb;border-radius:8px">
+            <h3>Current Session</h3>
+            <pre id="meOut" style="white-space:pre-wrap"></pre>
+            <button id="meBtn" class="btn btn-secondary" type="button">Refresh</button>
+            <button id="logoutBtn" class="btn btn-secondary" type="button" style="margin-left:8px">Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 SoundForYou • Serving Irish Premier Events Since 2008</p>
+    </div>
+  </footer>
+
+  <script>
+    async function postJSON(url, body) {
+      const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const text = await r.text();
+      try { return { ok: r.ok, data: JSON.parse(text) }; } catch { return { ok: r.ok, data: text }; }
+    }
+    async function getJSON(url) {
+      const r = await fetch(url, { method: 'GET' });
+      const text = await r.text();
+      try { return { ok: r.ok, data: JSON.parse(text) }; } catch { return { ok: r.ok, data: text }; }
+    }
+
+    // Register
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPw').value;
+      document.getElementById('regEmailErr').textContent = '';
+      document.getElementById('regPwErr').textContent = '';
+      const res = await postJSON('/api/register', { email, password });
+      document.getElementById('regResult').textContent = res.ok ? 'Registered!' : (res.data?.error || 'Error');
+    });
+
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPw').value;
+      const res = await postJSON('/api/login', { email, password });
+      document.getElementById('loginResult').textContent = res.ok ? 'Signed in!' : (res.data?.error || 'Error');
+    });
+
+    // Me
+    async function refreshMe(){
+      const res = await getJSON('/api/me');
+      document.getElementById('meOut').textContent = res.ok ? JSON.stringify(res.data, null, 2) : (res.data?.error || 'Not signed in');
+    }
+    document.getElementById('meBtn').addEventListener('click', refreshMe);
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await postJSON('/api/logout', {});
+      await refreshMe();
+    });
+
+    // Initial
+    refreshMe();
+  </script>
+</body>
+</html>

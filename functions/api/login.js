@@ -18,8 +18,10 @@ export async function onRequestPost({ env, request }) {
     if (!ok) return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
 
     const token = await createJWT({ sub: row.id, email: emailNorm }, env.JWT_SECRET, 60 * 60 * 24 * 7);
-    const headers = cookie(makeSessionCookie(COOKIE_NAME, token, 60 * 60 * 24 * 7));
-    return new Response(JSON.stringify({ ok: true }), { headers, headers: { 'content-type': 'application/json', ...headers } });
+    const setCookie = cookie(makeSessionCookie(COOKIE_NAME, token, 60 * 60 * 24 * 7));
+    return new Response(JSON.stringify({ ok: true }), {
+      headers: { 'content-type': 'application/json', ...setCookie }
+    });
   } catch {
     return new Response(JSON.stringify({ error: 'Bad request' }), { status: 400 });
   }
