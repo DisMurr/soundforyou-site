@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,10 +13,10 @@
 <body>
     <header>
         <nav class="nav-container">
-            <div class="nav-brand">
+            <a class="nav-brand" href="/">
                 <img src="/assets/logo.svg" alt="SoundForYou" class="logo">
                 <span class="brand-name">SoundForYou</span>
-            </div>
+            </a>
             <ul class="nav-links">
                 <li><a href="/" class="nav-link">Home</a></li>
                 <li><a href="/services" class="nav-link">Services</a></li>
@@ -23,7 +24,6 @@
             </ul>
         </nav>
     </header>
-
     <main>
         <section class="page-hero">
             <div class="container">
@@ -56,45 +56,48 @@
                             </div>
                         </div>
                     </div>
-
+                    <form class="contact-form" action="/api/contact" method="POST" novalidate>
                     <form class="contact-form" action="/api/contact" method="POST">
   <div class="form-group">
     <label for="name">Name *</label>
+    <span id="name-error" class="error-message" aria-live="polite"></span>
     <input id="name" name="name" required />
   </div>
 
   <div class="form-group">
     <label for="email">Email *</label>
+    <span id="email-error" class="error-message" aria-live="polite"></span>
     <input id="email" name="email" type="email" required />
   </div>
 
   <div class="form-group">
     <label for="event_date">Event Date</label>
+    <span id="message-error" class="error-message" aria-live="polite"></span>
     <input id="event_date" name="event_date" type="date" />
   </div>
 
   <div class="form-group">
     <label for="venue">Venue / Location</label>
     <input id="venue" name="venue" placeholder="Hotel/venue name, town" />
-  </div>
 
   <div class="form-group">
     <label for="audience">Approx. Guests</label>
     <input id="audience" name="audience" inputmode="numeric" placeholder="e.g., 120" />
   </div>
-
-  <div class="form-group">
-    <label for="package">Package</label>
-    <select id="package" name="package">
-      <option value="">Select (optional)</option>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SoundForYou • Serving Irish Premier Events Since 2008</p>
+        </div>
+    </footer>
       <option>Compact Party</option>
       <option>Wedding Evening</option>
       <option>Corporate AV</option>
-      <option>Live Sound</option>
+        const form = document.querySelector('.contact-form');
+        form.addEventListener('submit', function(e) {
       <option>Custom</option>
     </select>
   </div>
-
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
   <div class="form-group">
     <label for="message">Message *</label>
     <textarea id="message" name="message" rows="5" required placeholder="Tell us about timings, setup access, special requests…"></textarea>
@@ -104,20 +107,24 @@
   <input type="text" name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;"/>
 
   <!-- Turnstile -->
-  <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="light"></div>
+                const el = document.getElementById('name-error'); if (el) el.textContent = 'Name is required';
+                document.getElementById('name').setAttribute('aria-invalid', 'true');
 
   <button type="submit" class="btn btn-primary">Send Message</button>
 </form>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-                </div>
+                const el = document.getElementById('email-error'); if (el) el.textContent = 'Email is required';
+                document.getElementById('email').setAttribute('aria-invalid', 'true');
             </div>
         </section>
-    </main>
+                const el = document.getElementById('email-error'); if (el) el.textContent = 'Please enter a valid email';
+                document.getElementById('email').setAttribute('aria-invalid', 'true');
 
     <footer>
         <div class="container">
             <p>&copy; 2024 SoundForYou. All rights reserved.</p>
-        </div>
+                const el = document.getElementById('message-error'); if (el) el.textContent = 'Message is required';
+                document.getElementById('message').setAttribute('aria-invalid', 'true');
     </footer>
 
     <script>
