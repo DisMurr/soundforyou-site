@@ -24,6 +24,9 @@ export async function onRequestPost({ request, env }) {
   }).then(r => r.json());
   if (!verify.success) return json({ ok:false, error:'Captcha failed' }, 400);
 
+  // Determine recipient
+  const toEmail = (env.CONTACT_TO || 'frank@soundforyou.ie').trim();
+
   // Compose email (MailChannels)
   const lines = [
     `Name: ${name}`,
@@ -38,7 +41,7 @@ export async function onRequestPost({ request, env }) {
   ].filter(Boolean).join('\n');
 
   const payload = {
-    personalizations: [{ to: [{ email: env.CONTACT_TO }] }],
+    personalizations: [{ to: [{ email: toEmail }] }],
     from: { email: 'no-reply@soundforyou.ie', name: 'SoundForYou Website' },
     subject: `New enquiry – ${name}`,
     content: [{ type: 'text/plain', value: lines }],
