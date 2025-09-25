@@ -7,13 +7,13 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://soundforyou.com/services.html</loc>
+    <loc>https://www.soundforyou.ie/services</loc>
         <lastmod>2024-01-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://soundforyou.com/contact.html</loc>
+    <loc>https://www.soundforyou.ie/contact</loc>
         <lastmod>2024-01-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
