@@ -3,9 +3,9 @@ compatibility_date = "2025-09-26"
 # If you use Node APIs in Functions, uncomment this:
 # compatibility_flags = ["nodejs_compat"]
 
-[pages]
-# Optional but helpful if deploying from Git
-production_branch = "main"
+[build]
+command = "npm install && npm run build"
 
-# Ensure Wrangler uses the Parcel build output when running 'wrangler pages deploy'.
-pages_build_output_dir = "./dist"
+[pages]
+production_branch = "main"
+pages_build_output_dir = "dist"
