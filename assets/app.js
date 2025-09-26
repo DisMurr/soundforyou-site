@@ -122,18 +122,21 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const response = await fetch('/api/me');
       if (response.ok) {
-        // Show account link, hide sign-in
+        // Show account link, hide sign-in and sign-up
         document.getElementById('account-link').style.display = 'block';
         document.getElementById('sign-in-link').style.display = 'none';
+        document.getElementById('sign-up-link').style.display = 'none';
       } else {
-        // Show sign-in, hide account
+        // Show sign-in and sign-up, hide account
         document.getElementById('account-link').style.display = 'none';
         document.getElementById('sign-in-link').style.display = 'block';
+        document.getElementById('sign-up-link').style.display = 'block';
       }
     } catch (e) {
       // Assume not logged in
       document.getElementById('account-link').style.display = 'none';
       document.getElementById('sign-in-link').style.display = 'block';
+      document.getElementById('sign-up-link').style.display = 'block';
     }
   }
 });
