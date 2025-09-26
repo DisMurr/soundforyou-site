@@ -6,6 +6,10 @@ export async function onRequest(context) {
   console.log('Method received:', request.method);  // Must print "POST"
   console.log('Env bindings:', { hasDB: !!env.DB, hasJWT: !!env.JWT_SECRET });
 
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method Not Allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
+  }
+
   // Parse body (your payload)
   let body;
   try {
