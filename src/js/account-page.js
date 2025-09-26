@@ -106,16 +106,34 @@ function attachEventListeners() {
 
     if (!validateRegisterInputs(email, password, confirm)) return;
 
-    const res = await postJSON('/api/register', { email, password });
-    selectors.regResult.textContent = res.ok
-      ? 'Registered! You can now sign in.'
-      : res.data?.error || 'Error';
-    if (res.ok) {
-      await refreshMe();
-      updateAuthNav();
-      selectors.registerForm.reset();
-      updateStrengthIndicator('');
-    }
+    fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, username: email }) // Assuming username is email for simplicity
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(data => Promise.reject(data.error || `HTTP ${res.status}`));
+        }
+        return res.json();
+      })
+      .then(data => {
+        selectors.regResult.textContent = 'Account created! Redirecting...';
+        localStorage.setItem('authToken', data.token);  // Save token
+        // Fetch /me or redirect
+        fetch('/api/me', { headers: { 'Authorization': `Bearer ${data.token}` } })
+          .then(meRes => meRes.json())
+          .then(meData => console.log('Profile:', meData.user))  // Or update UI
+          .catch(err => console.error('Me fetch error:', err));
+        // Update UI
+        updateAuthNav();
+        selectors.registerForm.reset();
+        updateStrengthIndicator('');
+      })
+      .catch(err => {
+        console.error('Registration failed:', err);
+        selectors.regResult.innerHTML = `<p style="color:red;">Error: ${err}</p>`;  // Specific error
+      });
   });
 
   selectors.loginForm?.addEventListener('submit', async (event) => {

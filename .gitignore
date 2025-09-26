@@ -32,3 +32,6 @@ temp/
 # Cache directories
 .cache/
 .parcel-cache/
+
+# Source maps
+*.map
