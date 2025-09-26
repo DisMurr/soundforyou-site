@@ -4,7 +4,4 @@ compatibility_date = "2025-09-26"
 # compatibility_flags = ["nodejs_compat"]
 
 pages_build_output_dir = "dist"
-build_command = "npm run build"
-
-[pages]
-production_branch = "main"
+pages_build_command = "npm run build"
