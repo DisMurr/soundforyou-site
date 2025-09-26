@@ -1,5 +1,7 @@
 // assets/app.js - Handle forms and auth
+console.log('app.js loaded');
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded fired');
   // Check if on account page
   const isAccountPage = window.location.pathname === '/account';
 
