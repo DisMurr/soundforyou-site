@@ -1,126 +1,123 @@
 // /functions/api/register.js
-// Handles POST to /api/register (creates user, issues token)
-
 export default {
   async fetch(request, env, ctx) {
-    // Deep logging for 405 diagnosis (shows in Cloudflare logs)
-    console.log('=== REGISTER FUNCTION HIT ===');
-    console.log('Method:', request.method);  // Should be "POST"
-    console.log('URL:', request.url);
-    console.log('Headers:', Object.fromEntries(request.headers.entries()));  // Includes Content-Type, Length
-    console.log('Content-Length:', request.headers.get('content-length'));  // Should be 62
+    // Deep diagnostics (logs if this prints → Function loads)
+    console.log('=== /api/register FUNCTION LOADED & HIT ===');
+    console.log('Request Method:', request.method, '(type:', typeof request.method, ')');  // Expect "POST", "string"
+    console.log('Full Headers:', JSON.stringify([...request.headers.entries()]));  // Includes Content-Type
+    console.log('Bindings Available:', {
+      hasDB: !!env.DB,
+      dbType: typeof env.DB,
+      hasJWT_SECRET: !!env.JWT_SECRET && env.JWT_SECRET.length > 0
+    });
 
-    // Body logging (parse early to see payload)
+    // TEST: Try DB query here (logs if binding works; no crash = good)
+    try {
+      if (env.DB) {
+        const testRow = await env.DB.prepare('SELECT 1 as test').first();
+        console.log('D1 Binding Test Passed:', testRow?.test === 1 ? 'OK' : 'Failed');
+      } else {
+        console.log('D1 Binding Missing - Function will 500 on DB use');
+      }
+    } catch (dbTestError) {
+      console.error('D1 Test Error (early check):', dbTestError.message);
+    }
+
+    // Body parse (your 62-byte JSON)
     let body;
     try {
-      if (request.method === 'POST' && request.headers.get('content-type')?.includes('json')) {
-        body = await request.json();
-        console.log('Parsed Body:', body);  // e.g., {email: "darraghmurray@outlook.ie", password: "VallMurr90!1"}
-      } else {
-        console.log('No/Invalid body for non-POST or non-JSON');
-      }
-    } catch (parseError) {
-      console.error('Body parse error:', parseError.message);
-      body = null;
+      body = await request.json();
+      console.log('Body Parsed Successfully:', body);  // {email, password}
+    } catch (e) {
+      console.error('Body Parse Error:', e.message);
+      return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
-    // Flexible method check (logs if fails)
-    const isPost = request.method === 'POST';
-    console.log('Is POST?', isPost);
-    if (!isPost) {
-      console.error('405 Triggered: Expected POST, got', request.method, '(type:', typeof request.method, ')');
-      return new Response(JSON.stringify({
-        error: `Method not allowed for registration. Expected POST, got ${request.method || 'undefined'}. Body parsed: ${!!body}`,
-        receivedMethod: request.method,
-        allowedMethods: ['POST'],
-        suggestion: 'Check Function deployment and client fetch.'
+    // TEMP: Bypass method check for testing (comment out after confirming POST)
+    // if (request.method !== 'POST') {
+    //   console.error('405: Would trigger here, but bypassed for debug. Method was:', request.method);
+    //   return new Response(JSON.stringify({ 
+    //     error: 'Bypassed method check - confirm if POST reaches here',
+    //     method: request.method
+    //   }), { status: 405, headers: { 'Content-Type': 'application/json' } });
+    // }
+
+    // Re-enable for prod:
+    if (request.method !== 'POST') {
+      console.error('405 REAL: Expected POST, got', request.method);
+      return new Response(JSON.stringify({ 
+        error: 'Method Not Allowed: Use POST. (Logs sent to Cloudflare)',
+        methodReceived: request.method,
+        bindingsOK: !!env.DB
       }), {
         status: 405,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Allow': 'POST'
-        }
+        headers: { 'Content-Type': 'application/json', 'Allow': 'POST' }
       });
     }
 
-    // Proceed with POST logic (validation, DB, etc.)
-    const { email, password } = body || {};
-    console.log('Extracted data:', { email, hasPassword: !!password });
+    console.log('Method OK: Proceeding with POST...');
 
-    // Validation
+    const { email, password, username = email?.split('@')[0] || 'user' } = body;  // Fallback username
+
+    // Validate
     if (!email || !password || password.length < 8) {
-      console.log('Validation failed:', { email: !!email, pwLength: password?.length });
-      return new Response(JSON.stringify({ error: 'Missing email/password or password <8 chars' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return new Response(JSON.stringify({ error: 'Invalid email/password' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
-    // Env/DB checks
-    if (!env.DB) {
-      console.error('DB binding missing');
-      return new Response(JSON.stringify({ error: 'Server config: No database' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-    }
-    console.log('DB bound, JWT_SECRET present:', !!env.JWT_SECRET);
-
-    // Hash password (SHA-256)
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashedPassword = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-    console.log('Password hashed (shortened):', hashedPassword.substring(0, 10) + '...');
-
-    // Check existing user
-    const existing = await env.DB.prepare('SELECT id FROM users WHERE LOWER(email) = ?')
-      .bind(email.toLowerCase()).first();
-    if (existing) {
-      console.log('Duplicate email found');
-      return new Response(JSON.stringify({ error: 'Email already registered' }), {
-        status: 409,
-        headers: { 'Content-Type': 'application/json' }
-      });
+    // JWT_SECRET check (errors here = 500 cause)
+    if (!env.JWT_SECRET) {
+      console.error('JWT_SECRET Missing - Cannot sign tokens');
+      return new Response(JSON.stringify({ error: 'Server config: Auth secret unavailable' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 
-    // Insert user
-    const result = await env.DB.prepare(
-      'INSERT INTO users (email, password, username) VALUES (?, ?, ?)'  // Add username if in body
-    ).bind(email.toLowerCase(), hashedPassword, body.username || email.split('@')[0]).run();  // Fallback username
-
-    if (!result.success) {
-      console.error('DB insert failed:', result.error);
-      return new Response(JSON.stringify({ error: 'Failed to save user. Try again.' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
+    // Hash password (tests crypto)
+    try {
+      const encoder = new TextEncoder();
+      const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(password));
+      const hashedPassword = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+      console.log('Hashing Success (test)');
+    } catch (hashError) {
+      console.error('Crypto/Hash Error (bindings/compat issue?):', hashError.message);
+      return new Response(JSON.stringify({ error: 'Server error: Hashing failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 
-    const userId = result.meta.last_row_id;
-    console.log('User inserted, ID:', userId);
-
-    // Generate token (simple base64; secure with JWT_SECRET)
-    const payload = {
-      userId,
-      email: email.toLowerCase(),
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 86400  // 1 day
-    };
-    const token = btoa(JSON.stringify(payload));  // Base64 for demo
-    console.log('Token generated');
-
-    console.log('=== REGISTRATION SUCCESS ===');
-
-    return new Response(JSON.stringify({
-      success: true,
-      token,
-      user: { id: userId, email: email.toLowerCase() }
-    }), {
-      status: 201,
-      headers: {
-        'Content-Type': 'application/json',
-        'Set-Cookie': `authToken=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`,
-        'Access-Control-Allow-Origin': '*'
+    // DB operations (full reg)
+    try {
+      // Duplicate check
+      const existing = await env.DB.prepare('SELECT id FROM users WHERE LOWER(email) = ?').bind(email.toLowerCase()).first();
+      if (existing) {
+        return new Response(JSON.stringify({ error: 'Email exists' }), { status: 409, headers: { 'Content-Type': 'application/json' } });
       }
-    });
+
+      // Insert
+      const insert = await env.DB.prepare(
+        'INSERT INTO users (email, password, username) VALUES (?, ?, ?)'
+      ).bind(email.toLowerCase(), hashedPassword, username).run();  // hashedPassword from above
+
+      if (!insert.success) {
+        console.error('DB Insert Error:', insert.error);
+        return new Response(JSON.stringify({ error: 'Database save failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      }
+
+      const userId = insert.meta.last_row_id;
+
+      // Token (uses JWT_SECRET)
+      const payload = { userId, email: email.toLowerCase(), exp: Date.now() / 1000 + 86400 };
+      // Simple HMAC (requires compat flags)
+      const encoder = new TextEncoder();
+      const key = await crypto.subtle.importKey('raw', encoder.encode(env.JWT_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+      const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(JSON.stringify(payload)));
+      const token = btoa(JSON.stringify(payload)) + '.' + btoa(String.fromCharCode(...new Uint8Array(sig)));
+
+      console.log('Registration Complete for:', email);
+
+      return new Response(JSON.stringify({ success: true, token, user: { id: userId, email } }), {
+        status: 201,
+        headers: { 'Content-Type': 'application/json', 'Set-Cookie': `authToken=${token}; HttpOnly; Secure; SameSite=Strict` }
+      });
+    } catch (dbError) {
+      console.error('DB/JWT Error in Reg:', dbError);
+      return new Response(JSON.stringify({ error: 'Internal error: ' + dbError.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    }
   }
 };
