@@ -1,17 +1,13 @@
-// assets/app.js - Handle forms and auth
-console.log('app.js loaded');
+// assets/app.js - Handle forms and auth (null-safe version)
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOMContentLoaded fired');
-  // Check page
-  const isLoginPage = window.location.pathname === '/login';
-  const isAccountPage = window.location.pathname === '/account';
-
-  if (isAccountPage) {
-    loadAccountPage();
-  } else if (isLoginPage) {
-    // Forms are already there
-  } else {
-    updateNav();
+  // Helper: Safe style update (avoids null errors)
+  function safeDisplay(elementId, displayValue) {
+    const element = document.getElementById(elementId);
+    if (!element) {
+      console.warn(`Element not found: #${elementId} (skip nav update)`);
+      return;  // Silent no-op
+    }
+    element.style.display = displayValue;
   }
 
   // Handle register form
@@ -21,27 +17,34 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const formData = new FormData(registerForm);
       const data = {
-        email: formData.get('email'),
-        password: formData.get('password'),
-        username: formData.get('username') || undefined
+        email: formData.get('email')?.trim() || '',
+        password: formData.get('password') || '',
+        username: formData.get('username')?.trim() || undefined  // Fallback if no username input
       };
+
+      // Quick validation (optional, server handles too)
+      if (!data.email || !data.password || data.password.length < 8) {
+        alert('Email required, password min 8 chars');
+        return;
+      }
 
       try {
         const response = await fetch('/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',  // For cookies/token
           body: JSON.stringify(data)
         });
         const result = await response.json();
         if (response.ok) {
           alert('Registration successful! You can now log in.');
           registerForm.reset();
-          // Redirect to account
-          window.location.href = '/account';
+          updateNav();  // Refresh nav after success (now safe)
         } else {
-          alert('Error: ' + result.error);
+          alert('Error: ' + (result?.error || 'Registration failed'));
         }
       } catch (error) {
+        console.error('Register error:', error);
         alert('Network error: ' + error.message);
       }
     });
@@ -54,93 +57,62 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const formData = new FormData(loginForm);
       const data = {
-        email: formData.get('email'),
-        password: formData.get('password')
+        email: formData.get('email')?.trim() || '',
+        password: formData.get('password') || ''
       };
+
+      // Quick validation
+      if (!data.email || !data.password) {
+        alert('Email and password required');
+        return;
+      }
 
       try {
         const response = await fetch('/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
           body: JSON.stringify(data)
         });
         const result = await response.json();
         if (response.ok) {
           alert('Login successful!');
-          // Redirect to account
-          window.location.href = '/account';
+          updateNav();  // Refresh nav
+          window.location.href = '/';  // Or dashboard
         } else {
-          alert('Error: ' + result.error);
+          alert('Error: ' + (result?.error || 'Login failed'));
         }
       } catch (error) {
+        console.error('Login error:', error);
         alert('Network error: ' + error.message);
       }
     });
   }
 
-  // Handle logout (nav button)
-  const logoutBtnNav = document.getElementById('logout-btn-nav');
-  if (logoutBtnNav) {
-    logoutBtnNav.addEventListener('click', async () => {
+  // Update nav based on auth (null-safe)
+  function updateNav() {
+    safeDisplay('account-link', 'none');  // Default: Hide account (not logged in)
+    safeDisplay('login-link', 'block');
+
+    fetch('/api/me', {
+      credentials: 'same-origin'  // For auth cookies
+    })
+    .then(async (response) => {
       try {
-        const response = await fetch('/api/logout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-        if (response.ok) {
-          alert('Logged out successfully!');
-          window.location.href = '/';
-        } else {
-          alert('Logout failed.');
+        const data = await response.json();
+        if (response.ok && data.user) {  // Assume {user: {...}} from /api/me
+          safeDisplay('account-link', 'block');
+          safeDisplay('login-link', 'none');
         }
-      } catch (error) {
-        alert('Network error: ' + error.message);
+      } catch (parseError) {
+        console.warn('Nav update: Parse error, assume not logged in');
       }
+    })
+    .catch((error) => {
+      console.warn('Nav update: Fetch failed (likely no auth), default to sign-in');
     });
   }
 
-  async function loadAccountPage() {
-    try {
-      const response = await fetch('/api/me');
-      if (response.ok) {
-        const data = await response.json();
-        // Populate user info
-        document.getElementById('user-email').textContent = data.user.email;
-        document.getElementById('user-username').textContent = data.user.username || 'Not set';
-        updateNav(); // Ensure nav is updated
-      } else {
-        // Not logged in, redirect to login
-        window.location.href = '/login';
-      }
-    } catch (e) {
-      window.location.href = '/login';
-    }
-  }
-
-  async function updateNav() {
-    console.log('updateNav called');
-    try {
-      const response = await fetch('/api/me');
-      console.log('fetch /api/me status:', response.status);
-      if (response.ok) {
-        console.log('Logged in, updating nav');
-        // Logged in: show account and logout, hide login
-        document.getElementById('account-link').style.display = 'block';
-        document.getElementById('logout-btn-nav').style.display = 'block';
-        document.getElementById('login-link').style.display = 'none';
-      } else {
-        console.log('Not logged in, nav as is');
-        // Not logged in: show login, hide account and logout
-        document.getElementById('account-link').style.display = 'none';
-        document.getElementById('logout-btn-nav').style.display = 'none';
-        document.getElementById('login-link').style.display = 'block';
-      }
-    } catch (e) {
-      console.log('updateNav error:', e);
-      // Assume not logged in
-      document.getElementById('account-link').style.display = 'none';
-      document.getElementById('logout-btn-nav').style.display = 'none';
-      document.getElementById('login-link').style.display = 'block';
-    }
-  }
+  // Initial nav update
+  updateNav();
 });
