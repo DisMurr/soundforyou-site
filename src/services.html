@@ -8,14 +8,25 @@
       name="description"
       content="Sound equipment hire, wedding & party DJs, corporate AV, and live sound packages. Delivery, setup and on-site engineer available."
     />
-    <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="canonical" href="https://www.soundforyou.ie/services" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.soundforyou.ie/services" />
+    <meta property="og:title" content="Services • SoundForYou" />
+    <meta property="og:description" content="Explore PA hire, DJ packages, corporate AV, and live sound services." />
+    <meta property="og:image" content="https://www.soundforyou.ie/assets/media/logo.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Services • SoundForYou" />
+    <meta name="twitter:description" content="Explore PA hire, DJ packages, corporate AV, and live sound services." />
+    <meta name="twitter:image" content="https://www.soundforyou.ie/assets/media/logo.svg" />
+  <link rel="icon" href="./assets/media/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./css/styles.css" />
+  <script type="module" defer src="./js/app.js"></script>
   </head>
   <body>
     <header>
       <nav class="nav-container">
         <a class="nav-brand" href="/">
-          <img src="/assets/logo.svg" alt="SoundForYou" class="logo" />
+          <img src="./assets/media/logo.svg" alt="SoundForYou" class="logo" />
           <span class="brand-name">SoundForYou</span>
         </a>
         <ul class="nav-links">
@@ -23,6 +34,7 @@
           <li><a class="nav-link active" href="/services" aria-current="page">Services</a></li>
           <li><a class="nav-link" href="/contact">Contact</a></li>
           <li><a class="nav-link" href="/account" id="account-link" style="display:none;">Account</a></li>
+          <li><a class="nav-link" href="/account" id="sign-in-link" style="display:none;">Sign in</a></li>
         </ul>
       </nav>
     </header>
@@ -133,16 +145,6 @@
         <p>&copy; 2025 SoundForYou • Serving Irish Premier Events Since 2008</p>
       </div>
     </footer>
-    <script>
-      (async () => {
-        try {
-          const res = await fetch('/api/me', { credentials: 'same-origin' });
-          const ct = (res.headers.get('content-type') || '').toLowerCase();
-          const isJson = ct.includes('application/json');
-          const link = document.getElementById('account-link');
-          if (link) link.style.display = (res.ok && isJson) ? '' : 'none';
-        } catch {}
-      })();
-    </script>
+    
   </body>
 </html>

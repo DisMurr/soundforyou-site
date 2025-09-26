@@ -1,103 +1,109 @@
-# soundforyou-site
+# SoundForYou Site
 
-Auth (Cloudflare Pages Functions + D1 + JWT cookies)
+Marketing site and authenticated client portal for SoundForYou, deployed on Cloudflare Pages with Pages Functions, D1, and MailChannels.
 
-Endpoints
-- POST /api/register — create account
-- POST /api/login — sign in (sets HttpOnly session cookie)
-- GET /api/me — get the signed-in user (protected)
-- POST /api/logout — clear session
+## Features
+- Responsive marketing pages (`/`, `/services`, `/contact`)
+- Contact form protected by Cloudflare Turnstile, delivered through MailChannels
+- Authenticated account area backed by D1 database and JWT cookies
+- Cloudflare Pages Functions for `/api/register`, `/api/login`, `/api/me`, `/api/logout`, `/api/contact`, `/api/health`
+- Modular frontend scripts with Parcel build pipeline
 
-Project files
-- functions/_lib/crypto.js — PBKDF2-based password hashing (Workers-compatible)
-- functions/_lib/jwt.js — HS256 JWT + cookie helpers
-- functions/api/register.js — register user
-- functions/api/login.js — login + set cookie
-- functions/api/me.js — protected user endpoint
-- functions/api/logout.js — clear cookie
-- _routes.json — route only /api/* to Functions
-- schema.sql — D1 schema for users table
-
-Setup (Cloudflare)
-1) Create D1 database and table
-	- Locally: npx wrangler d1 create my_auth_db
-	- Apply schema: npx wrangler d1 execute my_auth_db --file=schema.sql
-	- In Pages → Settings → Functions → D1 bindings: add binding DB → my_auth_db
-2) Environment variables
-	- JWT_SECRET: a long random string (64+ chars)
-3) Local dev
-	- Create .dev.vars with JWT_SECRET=your-secret
-	- Run: npx wrangler pages dev
-
-Usage (front-end)
-// register
-fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
-
-// login
-fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
-
-// get current user
-fetch('/api/me').then(r => r.json());
-
-// logout
-fetch('/api/logout', { method: 'POST' });
-
-Notes
-- The crypto helper uses PBKDF2 as a Workers-safe baseline. You can swap to scrypt/argon2 WASM later.
-- Cookies are HttpOnly; Secure; SameSite=Lax. JWT lives in the cookie only.
-
-## Deploying to Cloudflare Pages (file-based routing)
-
-1) Ensure structure (Functions at repo root)
-
+## Project Structure
 ```
 .
-├─ functions/
-│  └─ api/
-│     ├─ hello.js
-│     ├─ health.js
-│     ├─ register.js
-│     ├─ login.js
-│     ├─ me.js
-│     └─ logout.js
-├─ _routes.json             # { "version":1, "include":["/api/*"] }
-├─ wrangler.toml            # compatibility_date, pages_build_output_dir
-└─ static files (index.html, etc.)
+├── src/
+│   ├── index.html
+│   ├── services.html
+│   ├── contact.html
+│   ├── account.html
+│   ├── 404.html
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   ├── app.js
+│   │   └── account-page.js
+│   └── assets/
+│       └── media/
+│           └── logo.svg
+├── functions/
+│   ├── api/
+│   │   ├── contact.js
+│   │   ├── health.js
+│   │   ├── hello.js
+│   │   ├── login.js
+│   │   ├── logout.js
+│   │   ├── me.js
+│   │   └── register.js
+│   └── _lib/
+│       ├── crypto.js
+│       └── jwt.js
+├── schema.sql
+├── _routes.json
+├── wrangler.toml
+└── package.json
 ```
 
-2) Configure Wrangler (repo root)
-
+## Getting Started
+```bash
+npm install
+npm run dev
 ```
-name = "soundforyou-site"
-compatibility_date = "2025-09-26"
+This starts Parcel’s dev server on <http://localhost:1234>. Parcel watches all files under `src/`.
 
-[pages]
-production_branch = "main"
+To generate an optimized production build:
+```bash
+npm run build
+```
+The build output is written to `dist/`.
 
-[assets]
-directory = "."
+## Cloudflare Pages Deployment
+1. **Project configuration**
+   - Build command: `npm run build`
+   - Output directory: `dist`
+   - Functions directory: `functions`
+2. **Production bindings**
+   - D1 binding `DB`
+   - Environment variables: `JWT_SECRET`, `TURNSTILE_SECRET`, `CONTACT_TO`
+3. **Deploy**
+   - Push to `main` (Pages Git integration) _or_
+   - `npx wrangler pages deploy --branch main`
+4. **Verify**
+   - `GET /api/health` → JSON with binding checks
+   - Visit `/account` to register, log in, view session, and log out
 
-pages_build_output_dir = "."
+## Running Functions Locally
+Create `.dev.vars` with the required secrets, then run:
+```bash
+npx wrangler pages dev
+```
+This starts the static site and Pages Functions locally. A local D1 database will be created as needed.
+
+## Database
+`schema.sql` defines the D1 schema:
+```sql
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  pw_hash TEXT NOT NULL,
+  pw_salt TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+```
+Apply the schema to your production D1 database:
+```bash
+npx wrangler d1 execute <DATABASE_NAME> --file=schema.sql
 ```
 
-3) Cloudflare Pages Project → Settings → Functions
-- Toggle ON Functions for Production
-- Functions directory: `functions`
-- Add D1 binding: name `DB` → select your D1 database
-- Add env vars: `JWT_SECRET`, `TURNSTILE_SECRET`, `CONTACT_TO`
+## Testing & Quality
+- `npm run lint` – ESLint (ES2021 browser config)
+- `npm run format` – Prettier
+- Manual checks: Lighthouse, WAVE accessibility audit, `/api/health`
 
-4) Deploy
-- Local: `wrangler pages dev .` then `wrangler pages deploy`
-- Git: push to `main` to auto-deploy
+## Troubleshooting
+- **API returns HTML/404**: Verify Functions directory is set to `functions` and `_routes.json` is deployed.
+- **JWT errors**: Ensure `JWT_SECRET` is set in the environment and consistent across deployments.
+- **Turnstile/MailChannels**: Confirm `TURNSTILE_SECRET` and `CONTACT_TO` are set and the site key in `contact.html` matches your Turnstile widget.
 
-5) Verify
-- GET `/api/hello` → 200 JSON
-- GET `/api/health` → { ok:true, checks: { hasJWTSecret, hasDB } }
-- GET `/api/me` → 401 JSON (until logged in)
-- Visit `/account` to register → login → me → logout flow
-
-### Troubleshooting
-
-- 404 for `/api/*`: Functions not enabled on Production, wrong Functions directory, or `_worker.js` overshadowing `/functions`.
-- Import errors: Ensure ESM imports include `.js` (e.g., `../_lib/jwt.js`).
-- D1 errors: Make sure the binding is `DB`, schema applied, and JWT_SECRET set.
+## License
+MIT

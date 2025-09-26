@@ -7,15 +7,5 @@ compatibility_date = "2025-09-26"
 # Optional but helpful if deploying from Git
 production_branch = "main"
 
-# Static assets directory (Pages will upload this path)
-# If you later build to a folder like "dist" or "build", change to that path.
-[assets]
-directory = "."
-
-# Ensure Wrangler uses this path when running 'wrangler pages deploy'
-pages_build_output_dir = "."
-
-# Use Advanced Mode Worker when deploying with Wrangler.
-# Note: The Pages dashboard also detects _worker.js automatically when present
-# in the uploaded assets directory.
-main = "_worker.js"
+# Ensure Wrangler uses the Parcel build output when running 'wrangler pages deploy'.
+pages_build_output_dir = "./dist"

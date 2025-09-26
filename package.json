@@ -1,0 +1,19 @@
+{
+  "name": "soundforyou-site",
+  "version": "1.0.0",
+  "description": "SoundForYou marketing site with Cloudflare Pages Functions",
+  "scripts": {
+  "dev": "parcel src/*.html",
+  "build": "parcel build src/*.html --dist-dir dist --public-url ./ && cp -R src/assets dist/assets",
+    "lint": "eslint src/js",
+    "format": "prettier --write src"
+  },
+  "devDependencies": {
+    "@parcel/packager-raw-url": "^2.16.0",
+    "@parcel/transformer-jsonld": "^2.16.0",
+    "eslint": "^8.57.0",
+    "parcel": "^2.13.3",
+    "prettier": "^3.2.5"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead"
+}
