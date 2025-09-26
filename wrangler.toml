@@ -21,5 +21,6 @@ bucket_name = "soundforyou-sounds"
 [functions]
 directory = "functions"
 
-# Environment vars aren't in toml; set in Dashboard for secrets (overrides local)
-# But for local dev: Add [env.production] if needed
+# Environment variables for production
+[vars]
+JWT_SECRET = "a4b6c8d0e2f415263748596a7b8c9d0e11223344556677889900aabbccddeeffa4b6c8d0e2f415263748596a7b8c9d0e11223344556677889900aabbccddeeff"
