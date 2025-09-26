@@ -1,11 +1,18 @@
 name = "soundforyou-site"
 compatibility_date = "2025-09-26"
-# If you use Node APIs in Functions, uncomment this:
-# compatibility_flags = ["nodejs_compat"]
+# For Node.js APIs in Functions (e.g., crypto for hashing/JWT in register)
+compatibility_flags = ["nodejs_compat"]
 
+# Static assets from root (fixes deployment without dist)
 pages_build_output_dir = "."
 
+# D1 Database binding (enables env.DB in Functions for auth/DB operations)
 [[d1_databases]]
-binding = "DB"
-database_name = "soundforyou_db"
-database_id = "your_d1_id_here"  # Get from Cloudflare Dashboard > D1 > Bindings
+binding = "DB"  # This must match what your Functions code uses (e.g., env.DB)
+database_name = "soundforyou_db"  # Matches the name you created
+database_id = "b17fc148-4348-41a7-a0f1-ebca3bffbb80"
+
+# R2 for sound file storage/uploads
+[[r2_buckets]]
+binding = "SOUNDS"
+bucket_name = "soundforyou-sounds"  
