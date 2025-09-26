@@ -89,10 +89,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Handle logout (nav button)
+  const logoutBtnNav = document.getElementById('logout-btn-nav');
+  if (logoutBtnNav) {
+    logoutBtnNav.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/logout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin'
+        });
+        if (response.ok) {
+          alert('Logged out successfully!');
+          updateNav();  // Refresh nav
+          window.location.href = '/';  // Redirect to home
+        } else {
+          alert('Logout failed.');
+        }
+      } catch (error) {
+        console.error('Logout error:', error);
+        alert('Network error: ' + error.message);
+      }
+    });
+  }
+
   // Update nav based on auth (null-safe)
   function updateNav() {
     safeDisplay('account-link', 'none');  // Default: Hide account (not logged in)
-    safeDisplay('login-link', 'block');
+    safeDisplay('sign-in-link', 'block');
+    safeDisplay('logout-btn-nav', 'none');  // Hide logout
 
     fetch('/api/me', {
       credentials: 'same-origin'  // For auth cookies
@@ -102,7 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();
         if (response.ok && data.user) {  // Assume {user: {...}} from /api/me
           safeDisplay('account-link', 'block');
-          safeDisplay('login-link', 'none');
+          safeDisplay('sign-in-link', 'none');
+          safeDisplay('logout-btn-nav', 'block');  // Show logout
         }
       } catch (parseError) {
         console.warn('Nav update: Parse error, assume not logged in');
