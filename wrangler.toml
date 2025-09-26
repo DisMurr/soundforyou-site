@@ -1,9 +1,9 @@
 name = "soundforyou-site"
 compatibility_date = "2025-09-26"
-# For Node.js APIs in Functions (e.g., crypto for hashing/JWT in register)
+# Required for Node APIs in Functions (crypto.subtle for hashing/JWT)
 compatibility_flags = ["nodejs_compat"]
 
-# Static assets from root (fixes deployment without dist)
+# Static assets from root (no build needed)
 pages_build_output_dir = "."
 
 # D1 Database binding (enables env.DB in Functions for auth/DB operations)
@@ -16,3 +16,10 @@ database_id = "b17fc148-4348-41a7-a0f1-ebca3bffbb80"
 [[r2_buckets]]
 binding = "SOUNDS"
 bucket_name = "soundforyou-sounds"
+
+# Functions configuration (ensures /functions dir is scanned correctly)
+[functions]
+directory = "functions"
+
+# Environment vars aren't in toml; set in Dashboard for secrets (overrides local)
+# But for local dev: Add [env.production] if needed
