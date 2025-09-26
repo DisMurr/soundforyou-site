@@ -36,6 +36,7 @@
         <img src="/assets/logo.svg" alt="SoundForYou" class="logo" />
         <span class="brand-name">SoundForYou</span>
       </a>
+      <button id="mobile-toggle" class="nav-link" style="display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">☰</button>
       <ul class="nav-links">
         <li><a href="/" class="nav-link active" aria-current="page">Home</a></li>
         <li><a href="/services" class="nav-link">Services</a></li>
@@ -138,9 +139,27 @@
     </div>
   </footer>
 
+  <!-- Mobile Nav Toggle -->
   <script>
-    // Simple hamburger nav toggle (for mobile - add button in nav if needed)
-    document.addEventListener('DOMContentLoaded', () => { /* Your app.js handles auth nav */ });
+    // Hamburger toggle
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (mobileToggle && navLinks) {
+      mobileToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+      });
+      // Show toggle on mobile
+      if (window.innerWidth <= 768) mobileToggle.style.display = 'block';
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+          navLinks.classList.remove('active');
+          mobileToggle.style.display = 'none';
+        } else {
+          mobileToggle.style.display = 'block';
+        }
+      });
+    }
   </script>
 </body>
 </html>
