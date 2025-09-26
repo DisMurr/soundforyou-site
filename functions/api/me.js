@@ -1,4 +1,4 @@
-import { verifyJWT } from "../_lib/jwt";
+import { verifyJWT } from "../_lib/jwt.js";
 
 const COOKIE_NAME = 'session';
 

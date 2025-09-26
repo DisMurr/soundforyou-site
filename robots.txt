@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://soundforyou.com/sitemap.xml
+Sitemap: https://www.soundforyou.ie/sitemap.xml

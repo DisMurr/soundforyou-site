@@ -1,182 +1,144 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - SoundForYou</title>
-    <meta name="description" content="Contact SoundForYou for professional audio services. Get in touch for quotes and consultations.">
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact – SoundForYou</title>
+  <meta name="description" content="Contact SoundForYou for quotes and availability. Weddings, parties, and corporate events across Ireland.">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+  <style>
+    .field-row{display:flex;gap:12px}
+    .field-row .form-group{flex:1}
+  </style>
 </head>
 <body>
-    <header>
-        <nav class="nav-container">
-            <a class="nav-brand" href="/">
-                <img src="/assets/logo.svg" alt="SoundForYou" class="logo">
-                <span class="brand-name">SoundForYou</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="/" class="nav-link">Home</a></li>
-                <li><a href="/services" class="nav-link">Services</a></li>
-                <li><a href="/contact" class="nav-link active" aria-current="page">Contact</a></li>
-                <li><a href="/account" id="account-link" class="nav-link" style="display:none;">Account</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="page-hero">
-            <div class="container">
-                <h1>Contact Us</h1>
-                <p class="page-intro">Ready to bring your audio project to life? Get in touch today.</p>
+  <header>
+    <nav class="nav-container">
+      <a class="nav-brand" href="/">
+        <img src="/assets/logo.svg" alt="SoundForYou" class="logo">
+        <span class="brand-name">SoundForYou</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/services" class="nav-link">Services</a></li>
+        <li><a href="/contact" class="nav-link active" aria-current="page">Contact</a></li>
+        <li><a href="/account" id="account-link" class="nav-link" style="display:none;">Account</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1>Contact Us</h1>
+        <p class="page-intro">Tell us about your event and we'll get back within 24 hours.</p>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <h2>We're here to help</h2>
+            <p>Weddings, private parties, corporate AV, or live sound &mdash; we'll tailor a setup for your venue and audience.</p>
+          </div>
+
+          <form class="contact-form" action="/api/contact" method="POST" novalidate>
+            <div class="field-row">
+              <div class="form-group">
+                <label for="name">Name *</label>
+                <input id="name" name="name" required aria-describedby="name-error" />
+                <span id="name-error" class="error-message" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input id="email" name="email" type="email" required aria-describedby="email-error" />
+                <span id="email-error" class="error-message" aria-live="polite"></span>
+              </div>
             </div>
-        </section>
 
-        <section class="contact-section">
-            <div class="container">
-                <div class="contact-grid">
-                    <div class="contact-info">
-                        <h2>Let's Work Together</h2>
-                        <p>Whether you need mixing, mastering, sound design, or complete audio production, we're here to help bring your vision to life.</p>
-                        
-                        <div class="contact-details">
-                            <div class="contact-item">
-                                <h3>Response Time</h3>
-                                <p>We typically respond within 24 hours</p>
-                            </div>
-                            
-                            <div class="contact-item">
-                                <h3>Project Types</h3>
-                                <p>Music, podcasts, commercials, film, games, and more</p>
-                            </div>
-                            
-                            <div class="contact-item">
-                                <h3>Consultation</h3>
-                                <p>Free initial consultation for all projects</p>
-                            </div>
-                        </div>
-                    </div>
-                    <form class="contact-form" action="/api/contact" method="POST" novalidate>
-                    <form class="contact-form" action="/api/contact" method="POST">
-  <div class="form-group">
-    <label for="name">Name *</label>
-    <span id="name-error" class="error-message" aria-live="polite"></span>
-    <input id="name" name="name" required />
-  </div>
+            <div class="field-row">
+              <div class="form-group">
+                <label for="event_date">Event Date</label>
+                <input id="event_date" name="event_date" type="date" />
+              </div>
+              <div class="form-group">
+                <label for="venue">Venue / Location</label>
+                <input id="venue" name="venue" placeholder="Hotel/venue name, town" />
+              </div>
+            </div>
 
-  <div class="form-group">
-    <label for="email">Email *</label>
-    <span id="email-error" class="error-message" aria-live="polite"></span>
-    <input id="email" name="email" type="email" required />
-  </div>
+            <div class="form-group">
+              <label for="audience">Approx. Guests</label>
+              <input id="audience" name="audience" inputmode="numeric" placeholder="e.g., 120" />
+            </div>
 
-  <div class="form-group">
-    <label for="event_date">Event Date</label>
-    <span id="message-error" class="error-message" aria-live="polite"></span>
-    <input id="event_date" name="event_date" type="date" />
-  </div>
+            <div class="form-group">
+              <label for="package">Package</label>
+              <select id="package" name="package">
+                <option value="">Select a package (optional)</option>
+                <option>Compact Party</option>
+                <option>Wedding Evening</option>
+                <option>Corporate AV</option>
+                <option>Live Sound</option>
+                <option>Custom</option>
+              </select>
+            </div>
 
-  <div class="form-group">
-    <label for="venue">Venue / Location</label>
-    <input id="venue" name="venue" placeholder="Hotel/venue name, town" />
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="5" required aria-describedby="message-error" placeholder="Tell us about timings, setup access, special requests&hellip;"></textarea>
+              <span id="message-error" class="error-message" aria-live="polite"></span>
+            </div>
 
-  <div class="form-group">
-    <label for="audience">Approx. Guests</label>
-    <input id="audience" name="audience" inputmode="numeric" placeholder="e.g., 120" />
-  </div>
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 SoundForYou • Serving Irish Premier Events Since 2008</p>
+            <!-- Honeypot (spam trap) -->
+            <input type="text" name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;"/>
+
+            <!-- Cloudflare Turnstile container -->
+            <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" style="margin-bottom:12px;"></div>
+
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
         </div>
-    </footer>
-      <option>Compact Party</option>
-      <option>Wedding Evening</option>
-      <option>Corporate AV</option>
-        const form = document.querySelector('.contact-form');
-        form.addEventListener('submit', function(e) {
-      <option>Custom</option>
-    </select>
-  </div>
-            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-  <div class="form-group">
-    <label for="message">Message *</label>
-    <textarea id="message" name="message" rows="5" required placeholder="Tell us about timings, setup access, special requests…"></textarea>
-  </div>
+      </div>
+    </section>
+  </main>
 
-  <!-- Honeypot (spam trap) -->
-  <input type="text" name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;"/>
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 SoundForYou &bull; Serving Irish Premier Events Since 2008</p>
+    </div>
+  </footer>
 
-  <!-- Turnstile -->
-                const el = document.getElementById('name-error'); if (el) el.textContent = 'Name is required';
-                document.getElementById('name').setAttribute('aria-invalid', 'true');
+  <script>
+    // Simple client-side validation (non-blocking)
+    document.querySelector('.contact-form')?.addEventListener('submit', function(e){
+      const errs = { name: '', email: '', message: '' };
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if (!name) errs.name = 'Name is required';
+      if (!email) errs.email = 'Email is required';
+      else if (!/^\S+@\S+\.\S+$/.test(email)) errs.email = 'Enter a valid email';
+      if (!message) errs.message = 'Message is required';
+      document.getElementById('name-error').textContent = errs.name;
+      document.getElementById('email-error').textContent = errs.email;
+      document.getElementById('message-error').textContent = errs.message;
+      if (errs.name || errs.email || errs.message) e.preventDefault();
+    });
 
-  <button type="submit" class="btn btn-primary">Send Message</button>
-</form>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-                const el = document.getElementById('email-error'); if (el) el.textContent = 'Email is required';
-                document.getElementById('email').setAttribute('aria-invalid', 'true');
-            </div>
-        </section>
-                const el = document.getElementById('email-error'); if (el) el.textContent = 'Please enter a valid email';
-                document.getElementById('email').setAttribute('aria-invalid', 'true');
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 SoundForYou. All rights reserved.</p>
-                const el = document.getElementById('message-error'); if (el) el.textContent = 'Message is required';
-                document.getElementById('message').setAttribute('aria-invalid', 'true');
-    </footer>
-
-    <script>
-        // Basic form validation and submission handling
-        document.querySelector('.contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Clear previous errors
-            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-            
-            // Basic validation
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
-            
-            let hasErrors = false;
-            
-            if (!name) {
-                document.getElementById('name-error').textContent = 'Name is required';
-                hasErrors = true;
-            }
-            
-            if (!email) {
-                document.getElementById('email-error').textContent = 'Email is required';
-                hasErrors = true;
-            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                document.getElementById('email-error').textContent = 'Please enter a valid email';
-                hasErrors = true;
-            }
-            
-            if (!message) {
-                document.getElementById('message-error').textContent = 'Message is required';
-                hasErrors = true;
-            }
-            
-            if (!hasErrors) {
-                // Submit the form
-                this.submit();
-            }
-        });
-
-                // Toggle Account link visibility if logged in
-                (async () => {
-                    try {
-                        const res = await fetch('/api/me', { credentials: 'same-origin' });
-                        const ct = (res.headers.get('content-type') || '').toLowerCase();
-                        const isJson = ct.includes('application/json');
-                        const link = document.getElementById('account-link');
-                        if (link) link.style.display = (res.ok && isJson) ? '' : 'none';
-                    } catch {}
-                })();
-    </script>
+    // Toggle Account link visibility if logged in
+    (async () => {
+      try {
+        const res = await fetch('/api/me', { credentials: 'same-origin' });
+        const ct = (res.headers.get('content-type') || '').toLowerCase();
+        const isJson = ct.includes('application/json');
+        const link = document.getElementById('account-link');
+        if (link) link.style.display = (res.ok && isJson) ? '' : 'none';
+      } catch {}
+    })();
+  </script>
 </body>
 </html>

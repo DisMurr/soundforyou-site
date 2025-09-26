@@ -11,3 +11,11 @@ production_branch = "main"
 # If you later build to a folder like "dist" or "build", change to that path.
 [assets]
 directory = "."
+
+# Ensure Wrangler uses this path when running 'wrangler pages deploy'
+pages_build_output_dir = "."
+
+# Use Advanced Mode Worker when deploying with Wrangler.
+# Note: The Pages dashboard also detects _worker.js automatically when present
+# in the uploaded assets directory.
+main = "_worker.js"

@@ -45,3 +45,59 @@ fetch('/api/logout', { method: 'POST' });
 Notes
 - The crypto helper uses PBKDF2 as a Workers-safe baseline. You can swap to scrypt/argon2 WASM later.
 - Cookies are HttpOnly; Secure; SameSite=Lax. JWT lives in the cookie only.
+
+## Deploying to Cloudflare Pages (file-based routing)
+
+1) Ensure structure (Functions at repo root)
+
+```
+.
+├─ functions/
+│  └─ api/
+│     ├─ hello.js
+│     ├─ health.js
+│     ├─ register.js
+│     ├─ login.js
+│     ├─ me.js
+│     └─ logout.js
+├─ _routes.json             # { "version":1, "include":["/api/*"] }
+├─ wrangler.toml            # compatibility_date, pages_build_output_dir
+└─ static files (index.html, etc.)
+```
+
+2) Configure Wrangler (repo root)
+
+```
+name = "soundforyou-site"
+compatibility_date = "2025-09-26"
+
+[pages]
+production_branch = "main"
+
+[assets]
+directory = "."
+
+pages_build_output_dir = "."
+```
+
+3) Cloudflare Pages Project → Settings → Functions
+- Toggle ON Functions for Production
+- Functions directory: `functions`
+- Add D1 binding: name `DB` → select your D1 database
+- Add env vars: `JWT_SECRET`, `TURNSTILE_SECRET`, `CONTACT_TO`
+
+4) Deploy
+- Local: `wrangler pages dev .` then `wrangler pages deploy`
+- Git: push to `main` to auto-deploy
+
+5) Verify
+- GET `/api/hello` → 200 JSON
+- GET `/api/health` → { ok:true, checks: { hasJWTSecret, hasDB } }
+- GET `/api/me` → 401 JSON (until logged in)
+- Visit `/account` to register → login → me → logout flow
+
+### Troubleshooting
+
+- 404 for `/api/*`: Functions not enabled on Production, wrong Functions directory, or `_worker.js` overshadowing `/functions`.
+- Import errors: Ensure ESM imports include `.js` (e.g., `../_lib/jwt.js`).
+- D1 errors: Make sure the binding is `DB`, schema applied, and JWT_SECRET set.

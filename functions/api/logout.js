@@ -1,4 +1,4 @@
-import { clearCookie, cookie } from "../_lib/jwt";
+import { clearCookie, cookie } from "../_lib/jwt.js";
 
 const COOKIE_NAME = 'session';
 
