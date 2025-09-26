@@ -5,6 +5,14 @@ const COOKIE_NAME = 'session';
 
 export async function onRequestPost({ env, request }) {
   try {
+    if (!env.DB) {
+      console.error('Login error: D1 binding `DB` is not configured.');
+      return new Response(JSON.stringify({ error: 'Service unavailable. Please try again later.' }), {
+        status: 503,
+        headers: { 'content-type': 'application/json' }
+      });
+    }
+
     const { email, password } = await request.json();
     const emailNorm = (email || '').trim().toLowerCase();
 
@@ -22,7 +30,11 @@ export async function onRequestPost({ env, request }) {
     return new Response(JSON.stringify({ ok: true }), {
       headers: { 'content-type': 'application/json', ...setCookie }
     });
-  } catch {
-    return new Response(JSON.stringify({ error: 'Bad request' }), { status: 400 });
+  } catch (e) {
+    console.error('Login error:', e);
+    return new Response(JSON.stringify({ error: 'Unexpected error logging in.' }), {
+      status: 500,
+      headers: { 'content-type': 'application/json' }
+    });
   }
 }
