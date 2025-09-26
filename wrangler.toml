@@ -6,3 +6,8 @@ compatibility_date = "2025-09-26"
 [pages]
 # Optional but helpful if deploying from Git
 production_branch = "main"
+
+# Static assets directory (Pages will upload this path)
+# If you later build to a folder like "dist" or "build", change to that path.
+[assets]
+directory = "."
