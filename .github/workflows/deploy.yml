@@ -2,33 +2,39 @@ name: Deploy to Cloudflare Pages
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [main]  # Triggers on push to main
+  pull_request:
+    branches: [main]  # Optional: Preview on PRs
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      deployments: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4  # Clones repo
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: 18  # Or your version; stable for Wrangler
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (if package.json exists)
+        run: npm ci  # Or npm install; skips if no package.json
 
-      - name: Build site
-        run: npm run build
+      - name: Build (skip if no build needed)
+        run: |
+          # Optional: If you add package.json with "build" script later
+          # npm run build
+          echo "No build needed; serving from root"
+        # This creates dist if you implement it; otherwise, use . below
 
       - name: Deploy to Cloudflare Pages
-        run: npx wrangler@4 pages deploy dist --project-name soundforyou-site --commit-dirty=true --branch ${{ github.ref_name }}
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        uses: cloudflare/wrangler-action@v3  # Official action for Wrangler; handles npx
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}  # Pulls from secret
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}  # Optional if not in token
+          command: pages publish . --project-name soundforyou-site  # Use . for root; change to dist if building
+          # wranglerVersion: "3"  # Pins to stable v3.x
