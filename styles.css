@@ -1,0 +1,49 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #f8f9fa; background: #1a1a1a; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+header { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+.nav-container { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+.nav-brand { display: flex; align-items: center; text-decoration: none; color: #f8f9fa; font-weight: 600; font-size: 1.5rem; }
+.logo { height: 40px; margin-right: 0.5rem; }
+.nav-links { display: flex; list-style: none; gap: 1.5rem; }
+.nav-link { color: #f8f9fa; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.3s; cursor: pointer; border: none; background: transparent; }
+.nav-link:hover, .nav-link.active { background: #007bff; }
+.hero, .page-hero { padding: 4rem 0; text-align: center; color: white; background: linear-gradient(to right, #007bff, #0056b3); }
+.hero h1, .page-hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+.hero-text, .page-intro { font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+.btn { display: inline-block; padding: 1rem 2rem; border-radius: 6px; text-decoration: none; font-weight: 600; transition: transform 0.3s, box-shadow 0.3s; }
+.btn-primary { background: #007bff; color: white; border: none; cursor: pointer; }
+.btn-primary:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,123,255,0.4); }
+.btn-secondary { background: transparent; color: white; border: 2px solid white; margin-left: 1rem; }
+.features, .services, .account-section, .contact-section { padding: 4rem 0; }
+.features h2, .services h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #f8f9fa; }
+.features-grid, .services-grid, .contact-grid, .account-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.feature-card, .service-card, .account-form-container { background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; text-align: center; transition: transform 0.3s, background 0.3s; }
+.feature-card:hover, .service-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.2); }
+.feature-card h3, .service-card h3, .account-form-container h2 { color: #007bff; margin-bottom: 1rem; font-size: 1.5rem; }
+.service-features { list-style: none; text-align: left; padding-left: 0; }
+.service-features li { margin-bottom: 0.5rem; padding-left: 1rem; position: relative; }
+.service-features li:before { content: '▶'; color: #007bff; position: absolute; left: 0; }
+.price { font-weight: 700; color: #007bff; font-size: 1.2rem; margin-top: 1rem; }
+.field-row { display: flex; gap: 1rem; }
+.field-row .form-group { flex: 1; }
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #f8f9fa; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem; border: 2px solid #333; border-radius: 6px; background: #2a2a2a; color: #f8f9fa; font-size: 1rem; transition: border-color 0.3s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #007bff; outline: none; }
+.error-message { color: #ff6b6b; font-size: 0.875rem; display: block; margin-top: 0.25rem; }
+.cf-turnstile { margin: 1rem 0; text-align: center; }
+.cta-section { background: #333; padding: 3rem 0; text-align: center; }
+.cta-section h2 { font-size: 2rem; margin-bottom: 1rem; }
+#profile-section, .contact-info { background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; }
+#user-info p, .contact-info p { margin-bottom: 1rem; font-size: 1.1rem; }
+#user-info strong { color: #007bff; }
+.btn-secondary { background: transparent; border: 2px solid #007bff; color: #007bff; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; transition: background 0.3s; margin-top: 1rem; }
+.btn-secondary:hover { background: #007bff; color: white; }
+footer { background: #000; padding: 2rem 0; text-align: center; color: #ccc; }
+@media (max-width: 768px) { 
+  .nav-links, .field-row { display: none; } /* Hamburger for nav if added */ 
+  .hero h1, .page-hero h1 { font-size: 2rem; } 
+  .btn-secondary { margin-left: 0; margin-top: 1rem; display: block; } 
+  .account-grid, .contact-grid { grid-template-columns: 1fr; } 
+}

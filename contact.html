@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact – SoundForYou</title>
   <meta name="description" content="Contact SoundForYou for quotes and availability. Weddings, parties, and corporate events across Ireland.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
   <script defer src="/assets/app.js?v=3"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-  <style>
-    .field-row{display:flex;gap:12px}
-    .field-row .form-group{flex:1}
-  </style>
 </head>
 <body>
   <header>
@@ -24,10 +23,10 @@
       <ul class="nav-links">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/services" class="nav-link">Services</a></li>
-  <li><a href="/contact" class="nav-link active" aria-current="page">Contact</a></li>
-  <li><a href="/account" id="account-link" class="nav-link" style="display:none;">Account</a></li>
-  <li><a href="/login" id="sign-in-link" class="nav-link">Login</a></li>
-  <li><button id="logout-btn-nav" class="nav-link" style="display:none;">Logout</button></li>
+        <li><a href="/contact" class="nav-link active" aria-current="page">Contact</a></li>
+        <li><a href="/account" id="account-link" class="nav-link" style="display:none;">Account</a></li>
+        <li><a href="/login" id="sign-in-link" class="nav-link">Login</a></li>
+        <li><button id="logout-btn-nav" class="nav-link" style="display:none;">Logout</button></li>
       </ul>
     </nav>
   </header>
@@ -111,12 +110,12 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2025 SoundForYou &bull; Serving Irish Premier Events Since 2008</p>
+      <p>&copy; 2025 SoundForYou • Serving Irish Premier Events Since 2008</p>
     </div>
   </footer>
 
   <script>
-    // Simple client-side validation (non-blocking)
+    // Client-side validation (enhanced)
     document.querySelector('.contact-form')?.addEventListener('submit', function(e){
       const errs = { name: '', email: '', message: '' };
       const name = document.getElementById('name').value.trim();
@@ -129,9 +128,12 @@
       document.getElementById('name-error').textContent = errs.name;
       document.getElementById('email-error').textContent = errs.email;
       document.getElementById('message-error').textContent = errs.message;
-      if (errs.name || errs.email || errs.message) e.preventDefault();
+      if (errs.name || errs.email || errs.message) {
+        e.preventDefault();
+        // Focus first error
+        (document.getElementById('name-error').textContent ? document.getElementById('name') : document.getElementById('email')).focus();
+      }
     });
-
   </script>
 </body>
 </html>

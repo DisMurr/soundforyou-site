@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Account – SoundForYou</title>
   <meta name="description" content="Your account details.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
   <script defer src="/assets/app.js?v=3"></script>
@@ -37,12 +40,14 @@
 
     <section class="account-section">
       <div class="container">
-        <!-- Profile Section -->
+        <!-- Profile Section (JS from app.js populates #user-email, #user-username) -->
         <div id="profile-section">
+          <h2>Your Profile</h2>
           <div id="user-info">
-            <p><strong>Email:</strong> <span id="user-email"></span></p>
-            <p><strong>Username:</strong> <span id="user-username"></span></p>
+            <p><strong>Email:</strong> <span id="user-email">Loading...</span></p>
+            <p><strong>Username:</strong> <span id="user-username">Loading...</span></p>
           </div>
+          <button id="logout-btn" class="btn btn-secondary">Logout</button>
         </div>
       </div>
     </section>
@@ -54,5 +59,20 @@
     </div>
   </footer>
 
+  <script>
+    // App.js handles profile load (#meOut or similar; adapt if needed)
+    document.addEventListener('DOMContentLoaded', () => {
+      // Example: Fetch /api/me and populate (extend app.js if not there)
+      fetch('/api/me', { credentials: 'same-origin' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.user) {
+            document.getElementById('user-email').textContent = data.user.email;
+            document.getElementById('user-username').textContent = data.user.username || 'N/A';
+          }
+        })
+        .catch(() => { /* Redirect to login if 401 */ });
+    });
+  </script>
 </body>
 </html>
