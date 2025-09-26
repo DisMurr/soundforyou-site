@@ -15,4 +15,4 @@ database_id = "b17fc148-4348-41a7-a0f1-ebca3bffbb80"
 # R2 for sound file storage/uploads
 [[r2_buckets]]
 binding = "SOUNDS"
-bucket_name = "soundforyou-sounds"  
+bucket_name = "soundforyou-sounds"
