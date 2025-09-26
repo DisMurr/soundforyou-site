@@ -37,43 +37,58 @@
 
     <section class="account-section">
       <div class="container">
-        <div class="account-grid">
-          <div class="account-form-container">
-            <h2>Sign In</h2>
-            <form class="account-form" id="login-form" action="/api/login" method="POST" novalidate>
-              <div class="form-group">
-                <label for="login-email">Email *</label>
-                <input id="login-email" name="email" type="email" required aria-describedby="login-email-error" />
-                <span id="login-email-error" class="error-message" aria-live="polite"></span>
-              </div>
-              <div class="form-group">
-                <label for="login-password">Password *</label>
-                <input id="login-password" name="password" type="password" required aria-describedby="login-password-error" />
-                <span id="login-password-error" class="error-message" aria-live="polite"></span>
-              </div>
-              <button type="submit" class="btn btn-primary">Sign In</button>
-            </form>
+        <!-- Profile Section (shown when logged in) -->
+        <div id="profile-section" style="display: none;">
+          <h2>Your Account</h2>
+          <div id="user-info">
+            <p><strong>Email:</strong> <span id="user-email"></span></p>
+            <p><strong>Username:</strong> <span id="user-username"></span></p>
           </div>
+          <button id="logout-btn" class="btn btn-secondary">Logout</button>
+        </div>
 
-          <div class="account-form-container">
-            <h2>Create Account</h2>
-            <form class="account-form" id="register-form" action="/api/register" method="POST" novalidate>
-              <div class="form-group">
-                <label for="register-email">Email *</label>
-                <input id="register-email" name="email" type="email" required aria-describedby="register-email-error" />
-                <span id="register-email-error" class="error-message" aria-live="polite"></span>
-              </div>
-              <div class="form-group">
-                <label for="register-password">Password *</label>
-                <input id="register-password" name="password" type="password" required minlength="8" aria-describedby="register-password-error" />
-                <span id="register-password-error" class="error-message" aria-live="polite"></span>
-              </div>
-              <div class="form-group">
-                <label for="register-username">Username (optional)</label>
-                <input id="register-username" name="username" placeholder="Leave blank to use email prefix" />
-              </div>
-              <button type="submit" class="btn btn-primary" id="register-submit">Register</button>
-            </form>
+        <!-- Auth Forms (shown when not logged in) -->
+        <div id="auth-section">
+          <div class="account-grid">
+            <div class="account-form-container">
+              <h2>Sign In</h2>
+              <form class="account-form" id="login-form" action="/api/login" method="POST" novalidate>
+                <div class="form-group">
+                  <label for="login-email">Email *</label>
+                  <input id="login-email" name="email" type="email" required aria-describedby="login-email-error" />
+                  <span id="login-email-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="login-password">Password *</label>
+                  <input id="login-password" name="password" type="password" required aria-describedby="login-password-error" />
+                  <span id="login-password-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+              </form>
+            </div>
+
+            <div class="account-form-container">
+              <h2>Create Account</h2>
+              <form class="account-form" id="register-form" action="/api/register" method="POST" novalidate>
+                <div class="form-group">
+                  <label for="register-email">Email *</label>
+                  <input id="register-email" name="email" type="email" required aria-describedby="register-email-error" />
+                  <span id="register-email-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="register-password">Password *</label>
+                  <input id="register-password" name="password" type="password" required minlength="8" aria-describedby="register-password-error" />
+                  <span id="register-password-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="register-username">Username (optional)</label>
+                  <input id="register-username" name="username" placeholder="Leave blank to use email prefix" />
+                </div>
+                <!-- Turnstile CAPTCHA -->
+                <!-- <div class="cf-turnstile" data-sitekey="0x4AAAAAAA8h8q8z5g5w5w5w" data-callback="onTurnstileSuccess"></div> -->
+                <button type="submit" class="btn btn-primary" id="register-submit">Register</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

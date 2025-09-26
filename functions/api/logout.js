@@ -1,10 +1,16 @@
-import { clearCookie, cookie } from "../_lib/jwt.js";
+export async function onRequest(context) {
+  const { request, env } = context;
+  console.log('=== /api/logout EXECUTING ===');
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method Not Allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
+  }
 
-const COOKIE_NAME = 'session';
-
-export async function onRequestPost() {
-  const setCookie = cookie(clearCookie(COOKIE_NAME));
-  return new Response(JSON.stringify({ ok: true }), {
-    headers: { 'content-type': 'application/json', ...setCookie }
+  // Clear the cookie by setting it to empty with past expiry
+  return new Response(JSON.stringify({ success: true }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Set-Cookie': `authToken=; Path=/; HttpOnly; Secure; SameSite=Strict; Expires=Thu, 01 Jan 1970 00:00:00 GMT`
+    }
   });
 }
