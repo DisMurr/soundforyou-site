@@ -22,6 +22,7 @@
           <li><a class="nav-link" href="/">Home</a></li>
           <li><a class="nav-link active" href="/services" aria-current="page">Services</a></li>
           <li><a class="nav-link" href="/contact">Contact</a></li>
+          <li><a class="nav-link" href="/account" id="account-link" style="display:none;">Account</a></li>
         </ul>
       </nav>
     </header>
@@ -132,5 +133,16 @@
         <p>&copy; 2025 SoundForYou • Serving Irish Premier Events Since 2008</p>
       </div>
     </footer>
+    <script>
+      (async () => {
+        try {
+          const res = await fetch('/api/me', { credentials: 'same-origin' });
+          const ct = (res.headers.get('content-type') || '').toLowerCase();
+          const isJson = ct.includes('application/json');
+          const link = document.getElementById('account-link');
+          if (link) link.style.display = (res.ok && isJson) ? '' : 'none';
+        } catch {}
+      })();
+    </script>
   </body>
 </html>

@@ -35,6 +35,7 @@
           <li><a href="/" class="nav-link active" aria-current="page">Home</a></li>
           <li><a href="/services" class="nav-link">Services</a></li>
           <li><a href="/contact" class="nav-link">Contact</a></li>
+          <li><a href="/account" id="account-link" class="nav-link" style="display:none;">Account</a></li>
         </ul>
       </nav>
     </header>
@@ -130,4 +131,15 @@
       </div>
     </footer>
   </body>
+  <script>
+    (async () => {
+      try {
+        const res = await fetch('/api/me', { credentials: 'same-origin' });
+        const ct = (res.headers.get('content-type') || '').toLowerCase();
+        const isJson = ct.includes('application/json');
+        const link = document.getElementById('account-link');
+        if (link) link.style.display = (res.ok && isJson) ? '' : 'none';
+      } catch {}
+    })();
+  </script>
   </html>
