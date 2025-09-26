@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact – SoundForYou</title>
+  <meta name="description" content="Contact SoundForYou for quotes and availability. Weddings, parties, and corporate events across Ireland.">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+  <script defer src="/assets/app.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+  <style>
+    .field-row{display:flex;gap:12px}
+    .field-row .form-group{flex:1}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav-container">
+      <a class="nav-brand" href="/">
+        <img src="/assets/logo.svg" alt="SoundForYou" class="logo">
+        <span class="brand-name">SoundForYou</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/services" class="nav-link">Services</a></li>
+  <li><a href="/contact" class="nav-link active" aria-current="page">Contact</a></li>
+  <li><a href="/account" id="account-link" class="nav-link" style="display:none;">Account</a></li>
+  <li><a href="/account" id="sign-in-link" class="nav-link">Sign in</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1>Contact Us</h1>
+        <p class="page-intro">Tell us about your event and we'll get back within 24 hours.</p>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <h2>We're here to help</h2>
+            <p>Weddings, private parties, corporate AV, or live sound &mdash; we'll tailor a setup for your venue and audience.</p>
+          </div>
+
+          <form class="contact-form" action="/api/contact" method="POST" novalidate>
+            <div class="field-row">
+              <div class="form-group">
+                <label for="name">Name *</label>
+                <input id="name" name="name" required aria-describedby="name-error" />
+                <span id="name-error" class="error-message" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input id="email" name="email" type="email" required aria-describedby="email-error" />
+                <span id="email-error" class="error-message" aria-live="polite"></span>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="form-group">
+                <label for="event_date">Event Date</label>
+                <input id="event_date" name="event_date" type="date" />
+              </div>
+              <div class="form-group">
+                <label for="venue">Venue / Location</label>
+                <input id="venue" name="venue" placeholder="Hotel/venue name, town" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="audience">Approx. Guests</label>
+              <input id="audience" name="audience" inputmode="numeric" placeholder="e.g., 120" />
+            </div>
+
+            <div class="form-group">
+              <label for="package">Package</label>
+              <select id="package" name="package">
+                <option value="">Select a package (optional)</option>
+                <option>Compact Party</option>
+                <option>Wedding Evening</option>
+                <option>Corporate AV</option>
+                <option>Live Sound</option>
+                <option>Custom</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="5" required aria-describedby="message-error" placeholder="Tell us about timings, setup access, special requests&hellip;"></textarea>
+              <span id="message-error" class="error-message" aria-live="polite"></span>
+            </div>
+
+            <!-- Honeypot (spam trap) -->
+            <input type="text" name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;"/>
+
+            <!-- Cloudflare Turnstile container -->
+            <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" style="margin-bottom:12px;"></div>
+
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 SoundForYou &bull; Serving Irish Premier Events Since 2008</p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple client-side validation (non-blocking)
+    document.querySelector('.contact-form')?.addEventListener('submit', function(e){
+      const errs = { name: '', email: '', message: '' };
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if (!name) errs.name = 'Name is required';
+      if (!email) errs.email = 'Email is required';
+      else if (!/^\S+@\S+\.\S+$/.test(email)) errs.email = 'Enter a valid email';
+      if (!message) errs.message = 'Message is required';
+      document.getElementById('name-error').textContent = errs.name;
+      document.getElementById('email-error').textContent = errs.email;
+      document.getElementById('message-error').textContent = errs.message;
+      if (errs.name || errs.email || errs.message) e.preventDefault();
+    });
+
+  </script>
+</body>
+</html>
