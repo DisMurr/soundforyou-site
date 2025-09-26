@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – SoundForYou</title>
+  <meta name="description" content="Sign in or create an account to access SoundForYou services.">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+  <script defer src="/assets/app.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+</head>
+<body>
+  <header>
+    <nav class="nav-container">
+      <a class="nav-brand" href="/">
+        <img src="/assets/logo.svg" alt="SoundForYou" class="logo">
+        <span class="brand-name">SoundForYou</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/services" class="nav-link">Services</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+        <li><a href="/account" id="account-link" class="nav-link" style="display:none;">Account</a></li>
+        <li><a href="/login" id="login-link" class="nav-link active" aria-current="page">Login</a></li>
+        <li><button id="logout-btn-nav" class="nav-link" style="display:none;">Logout</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1>Account</h1>
+        <p class="page-intro">Sign in to your account or create a new one.</p>
+      </div>
+    </section>
+
+    <section class="account-section">
+      <div class="container">
+        <!-- Profile Section (shown when logged in) -->
+        <div id="profile-section" style="display: none;">
+          <h2>Your Account</h2>
+          <div id="user-info">
+            <p><strong>Email:</strong> <span id="user-email"></span></p>
+            <p><strong>Username:</strong> <span id="user-username"></span></p>
+          </div>
+          <button id="logout-btn" class="btn btn-secondary">Logout</button>
+        </div>
+
+        <!-- Auth Forms (shown when not logged in) -->
+        <div id="auth-section">
+          <div class="account-grid">
+            <div class="account-form-container">
+              <h2>Sign In</h2>
+              <form class="account-form" id="login-form" action="/api/login" method="POST" novalidate>
+                <div class="form-group">
+                  <label for="login-email">Email *</label>
+                  <input id="login-email" name="email" type="email" required aria-describedby="login-email-error" />
+                  <span id="login-email-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="login-password">Password *</label>
+                  <input id="login-password" name="password" type="password" required aria-describedby="login-password-error" />
+                  <span id="login-password-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+              </form>
+            </div>
+
+            <div class="account-form-container">
+              <h2>Create Account</h2>
+              <form class="account-form" id="register-form" action="/api/register" method="POST" novalidate>
+                <div class="form-group">
+                  <label for="register-email">Email *</label>
+                  <input id="register-email" name="email" type="email" required aria-describedby="register-email-error" />
+                  <span id="register-email-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="register-password">Password *</label>
+                  <input id="register-password" name="password" type="password" required minlength="8" aria-describedby="register-password-error" />
+                  <span id="register-password-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="register-username">Username (optional)</label>
+                  <input id="register-username" name="username" placeholder="Leave blank to use email prefix" />
+                </div>
+                <!-- Turnstile CAPTCHA -->
+                <!-- <div class="cf-turnstile" data-sitekey="0x4AAAAAAA8h8q8z5g5w5w5w" data-callback="onTurnstileSuccess"></div> -->
+                <button type="submit" class="btn btn-primary" id="register-submit">Register</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 SoundForYou. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -2,11 +2,14 @@
 console.log('app.js loaded');
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOMContentLoaded fired');
-  // Check if on account page
+  // Check page
+  const isLoginPage = window.location.pathname === '/login';
   const isAccountPage = window.location.pathname === '/account';
 
   if (isAccountPage) {
-    checkAuthAndUpdateUI();
+    loadAccountPage();
+  } else if (isLoginPage) {
+    // Forms are already there
   } else {
     updateNav();
   }
@@ -33,7 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.ok) {
           alert('Registration successful! You can now log in.');
           registerForm.reset();
-          // Optionally redirect to login or refresh
+          // Redirect to account
+          window.location.href = '/account';
         } else {
           alert('Error: ' + result.error);
         }
@@ -63,8 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const result = await response.json();
         if (response.ok) {
           alert('Login successful!');
-          // Refresh to show profile
-          window.location.reload();
+          // Redirect to account
+          window.location.href = '/account';
         } else {
           alert('Error: ' + result.error);
         }
@@ -74,10 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Handle logout
-  const logoutBtn = document.getElementById('logout-btn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
+  // Handle logout (nav button)
+  const logoutBtnNav = document.getElementById('logout-btn-nav');
+  if (logoutBtnNav) {
+    logoutBtnNav.addEventListener('click', async () => {
       try {
         const response = await fetch('/api/logout', {
           method: 'POST',
@@ -85,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (response.ok) {
           alert('Logged out successfully!');
-          window.location.reload();
+          window.location.href = '/';
         } else {
           alert('Logout failed.');
         }
@@ -95,26 +99,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  async function checkAuthAndUpdateUI() {
+  async function loadAccountPage() {
     try {
       const response = await fetch('/api/me');
       if (response.ok) {
         const data = await response.json();
-        // Show profile
-        document.getElementById('profile-section').style.display = 'block';
-        document.getElementById('auth-section').style.display = 'none';
         // Populate user info
         document.getElementById('user-email').textContent = data.user.email;
         document.getElementById('user-username').textContent = data.user.username || 'Not set';
+        updateNav(); // Ensure nav is updated
       } else {
-        // Show auth forms
-        document.getElementById('profile-section').style.display = 'none';
-        document.getElementById('auth-section').style.display = 'block';
+        // Not logged in, redirect to login
+        window.location.href = '/login';
       }
     } catch (e) {
-      // Show auth forms
-      document.getElementById('profile-section').style.display = 'none';
-      document.getElementById('auth-section').style.display = 'block';
+      window.location.href = '/login';
     }
   }
 
@@ -122,21 +121,21 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const response = await fetch('/api/me');
       if (response.ok) {
-        // Show account link, hide sign-in and sign-up
+        // Logged in: show account and logout, hide login
         document.getElementById('account-link').style.display = 'block';
-        document.getElementById('sign-in-link').style.display = 'none';
-        document.getElementById('sign-up-link').style.display = 'none';
+        document.getElementById('logout-btn-nav').style.display = 'block';
+        document.getElementById('login-link').style.display = 'none';
       } else {
-        // Show sign-in and sign-up, hide account
+        // Not logged in: show login, hide account and logout
         document.getElementById('account-link').style.display = 'none';
-        document.getElementById('sign-in-link').style.display = 'block';
-        document.getElementById('sign-up-link').style.display = 'block';
+        document.getElementById('logout-btn-nav').style.display = 'none';
+        document.getElementById('login-link').style.display = 'block';
       }
     } catch (e) {
       // Assume not logged in
       document.getElementById('account-link').style.display = 'none';
-      document.getElementById('sign-in-link').style.display = 'block';
-      document.getElementById('sign-up-link').style.display = 'block';
+      document.getElementById('logout-btn-nav').style.display = 'none';
+      document.getElementById('login-link').style.display = 'block';
     }
   }
 });
