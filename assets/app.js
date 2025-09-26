@@ -141,4 +141,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial nav update
   updateNav();
+
+  // Load user profile if on account page
+  if (window.location.pathname === '/account') {
+    loadUserProfile();
+  }
 });
+
+// Load user profile data for account page
+async function loadUserProfile() {
+  try {
+    const response = await fetch('/api/me', { credentials: 'same-origin' });
+    const data = await response.json();
+    if (response.ok && data.user) {
+      safeSetText('user-email', data.user.email);
+      safeSetText('user-username', data.user.username || 'Not set');
+    } else {
+      // Not logged in, redirect to login
+      window.location.href = '/login';
+    }
+  } catch (error) {
+    console.error('Error loading profile:', error);
+    alert('Error loading profile');
+  }
+}
+
+// Safe text setter
+function safeSetText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
