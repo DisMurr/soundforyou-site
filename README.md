@@ -66,8 +66,8 @@ The build output is written to `dist/`.
    - D1 binding `DB`
    - Environment variables: `JWT_SECRET`, `TURNSTILE_SECRET`, `CONTACT_TO`
 3. **Deploy**
-   - Push to `main` (Pages Git integration) _or_
-   - `npx wrangler pages deploy --branch main`
+   - Push to `main` to trigger the GitHub Actions workflow (requires repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`).
+   - Manual fallback: `npx wrangler pages deploy dist --project-name soundforyou-site`
 4. **Verify**
    - `GET /api/health` → JSON with binding checks
    - Visit `/account` to register, log in, view session, and log out
