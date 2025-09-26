@@ -118,20 +118,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function updateNav() {
+    console.log('updateNav called');
     try {
       const response = await fetch('/api/me');
+      console.log('fetch /api/me status:', response.status);
       if (response.ok) {
+        console.log('Logged in, updating nav');
         // Logged in: show account and logout, hide login
         document.getElementById('account-link').style.display = 'block';
         document.getElementById('logout-btn-nav').style.display = 'block';
         document.getElementById('login-link').style.display = 'none';
       } else {
+        console.log('Not logged in, nav as is');
         // Not logged in: show login, hide account and logout
         document.getElementById('account-link').style.display = 'none';
         document.getElementById('logout-btn-nav').style.display = 'none';
         document.getElementById('login-link').style.display = 'block';
       }
     } catch (e) {
+      console.log('updateNav error:', e);
       // Assume not logged in
       document.getElementById('account-link').style.display = 'none';
       document.getElementById('logout-btn-nav').style.display = 'none';
