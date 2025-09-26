@@ -72,9 +72,7 @@
                 <label for="register-username">Username (optional)</label>
                 <input id="register-username" name="username" placeholder="Leave blank to use email prefix" />
               </div>
-              <!-- Turnstile CAPTCHA -->
-              <div class="cf-turnstile" data-sitekey="0x4AAAAAAA8h8q8z5g5w5w5w" data-callback="onTurnstileSuccess"></div>
-              <button type="submit" class="btn btn-primary" id="register-submit" disabled>Register</button>
+              <button type="submit" class="btn btn-primary" id="register-submit">Register</button>
             </form>
           </div>
         </div>
@@ -87,11 +85,5 @@
       <p>&copy; 2025 SoundForYou. All rights reserved.</p>
     </div>
   </footer>
-
-  <script>
-    function onTurnstileSuccess(token) {
-      document.getElementById('register-submit').disabled = false;
-    }
-  </script>
 </body>
 </html>

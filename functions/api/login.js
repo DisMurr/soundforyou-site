@@ -3,38 +3,52 @@ import { createJWT, makeSessionCookie, cookie } from "../_lib/jwt.js";
 
 const COOKIE_NAME = 'session';
 
-export async function onRequestPost({ env, request }) {
-  try {
-    if (!env.DB) {
-      console.error('Login error: D1 binding `DB` is not configured.');
-      return new Response(JSON.stringify({ error: 'Service unavailable. Please try again later.' }), {
-        status: 503,
-        headers: { 'content-type': 'application/json' }
-      });
-    }
+export async function onRequest(context) {
+  const { request, env } = context;
+  console.log('=== /api/login EXECUTING ===');
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method Not Allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
+  }
 
+  try {
     const { email, password } = await request.json();
     const emailNorm = (email || '').trim().toLowerCase();
 
-    const row = await env.DB.prepare('SELECT id, pw_hash, pw_salt FROM users WHERE email = ?1')
+    if (!email || !password || password.length < 8) {
+      return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    if (!env.DB) {
+      console.error('Login error: D1 binding `DB` is not configured.');
+      return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    // Hash the input password
+    const encoder = new TextEncoder();
+    const hash = await crypto.subtle.digest('SHA-256', encoder.encode(password));
+    const hashed = btoa(String.fromCharCode(...new Uint8Array(hash)));
+
+    // Find user
+    const row = await env.DB.prepare('SELECT id, email, password FROM users WHERE email = ?')
       .bind(emailNorm)
       .first();
 
-    if (!row) return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
+    if (!row || row.password !== hashed) {
+      return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+    }
 
-    const ok = await verifyPassword(password || '', row.pw_hash, row.pw_salt);
-    if (!ok) return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
+    // Create token
+    const token = btoa(JSON.stringify({ userId: row.id, email: row.email, exp: Date.now() + 86400000 }));
 
-    const token = await createJWT({ sub: row.id, email: emailNorm }, env.JWT_SECRET, 60 * 60 * 24 * 7);
-    const setCookie = cookie(makeSessionCookie(COOKIE_NAME, token, 60 * 60 * 24 * 7));
-    return new Response(JSON.stringify({ ok: true }), {
-      headers: { 'content-type': 'application/json', ...setCookie }
+    return new Response(JSON.stringify({ success: true, token, user: { email: row.email } }), {
+      status: 200,
+      headers: { 
+        'Content-Type': 'application/json',
+        'Set-Cookie': `authToken=${token}; Path=/; HttpOnly; Secure; SameSite=Strict`
+      }
     });
   } catch (e) {
     console.error('Login error:', e);
-    return new Response(JSON.stringify({ error: 'Unexpected error logging in.' }), {
-      status: 500,
-      headers: { 'content-type': 'application/json' }
-    });
+    return new Response(JSON.stringify({ error: 'Database error' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
