@@ -3,4 +3,9 @@ compatibility_date = "2025-09-26"
 # If you use Node APIs in Functions, uncomment this:
 # compatibility_flags = ["nodejs_compat"]
 
-pages_build_output_dir = "dist"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "soundforyou_db"
+database_id = "your_d1_id_here"  # Get from Cloudflare Dashboard > D1 > Bindings
