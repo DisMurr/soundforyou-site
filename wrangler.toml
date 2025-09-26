@@ -1,4 +1,4 @@
-name = "soundforyou-site"
+name = "soundforyou"
 compatibility_date = "2025-09-26"
 # If you use Node APIs in Functions, uncomment this:
 # compatibility_flags = ["nodejs_compat"]
