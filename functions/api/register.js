@@ -1,4 +1,4 @@
-import { hashPassword } from "../_lib/crypto";
+import { hashPassword } from "../_lib/crypto.js";
 
 export async function onRequestPost({ env, request }) {
   try {

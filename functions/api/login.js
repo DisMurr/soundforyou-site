@@ -1,4 +1,4 @@
-import { verifyPassword } from "../_lib/crypto";
+import { verifyPassword } from "../_lib/crypto.js";
 import { createJWT, makeSessionCookie, cookie } from "../_lib/jwt";
 
 const COOKIE_NAME = 'session';
