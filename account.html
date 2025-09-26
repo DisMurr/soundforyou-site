@@ -33,22 +33,41 @@
 
   <main>
     <section class="page-hero">
+      <div class="hero-bg-animation"></div>
       <div class="container">
-        <h1>Your Account</h1>
-        <p class="page-intro">Manage your account details.</p>
+        <div class="hero-badge">👤 Account</div>
+        <h1>Your <span class="highlight">Account</span></h1>
+        <p class="page-intro">Manage your account details and preferences.</p>
       </div>
     </section>
 
     <section class="account-section">
       <div class="container">
         <!-- Profile Section (JS from app.js populates #user-email, #user-username) -->
-        <div id="profile-section">
+        <div id="profile-section" class="profile-card">
+          <div class="feature-icon">👋</div>
           <h2>Your Profile</h2>
-          <div id="user-info">
-            <p><strong>Email:</strong> <span id="user-email">Loading...</span></p>
-            <p><strong>Username:</strong> <span id="user-username">Loading...</span></p>
+          <div id="user-info" class="user-details">
+            <div class="user-detail-item">
+              <span class="detail-label">📧 Email:</span>
+              <span id="user-email" class="detail-value">Loading...</span>
+            </div>
+            <div class="user-detail-item">
+              <span class="detail-label">👤 Username:</span>
+              <span id="user-username" class="detail-value">Loading...</span>
+            </div>
+            <div class="user-detail-item">
+              <span class="detail-label">⚡ Status:</span>
+              <span class="detail-value">
+                <span class="status-badge active">Active</span>
+              </span>
+            </div>
           </div>
-          <button id="logout-btn" class="btn btn-secondary">Logout</button>
+          <div class="profile-actions">
+            <button id="logout-btn" class="btn btn-secondary">
+              🚪 Logout
+            </button>
+          </div>
         </div>
       </div>
     </section>

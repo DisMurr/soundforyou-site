@@ -34,28 +34,40 @@
 
   <main>
     <section class="page-hero">
+      <div class="hero-bg-animation"></div>
       <div class="container">
-        <h1>Account</h1>
-        <p class="page-intro">Sign in to your account or create a new one.</p>
+        <div class="hero-badge">🔐 Login</div>
+        <h1><span class="highlight">Account</span> Access</h1>
+        <p class="page-intro">Sign in to your account or create a new one to access premium features.</p>
       </div>
     </section>
 
     <section class="account-section">
       <div class="container">
         <!-- Profile Section (shown when logged in - JS toggles) -->
-        <div id="profile-section" style="display: none;">
-          <h2>Your Account</h2>
-          <div id="user-info">
-            <p><strong>Email:</strong> <span id="user-email"></span></p>
-            <p><strong>Username:</strong> <span id="user-username"></span></p>
+        <div id="profile-section" class="profile-card" style="display: none;">
+          <div class="feature-icon">👋</div>
+          <h2>Welcome Back!</h2>
+          <div id="user-info" class="user-details">
+            <div class="user-detail-item">
+              <span class="detail-label">📧 Email:</span>
+              <span id="user-email" class="detail-value"></span>
+            </div>
+            <div class="user-detail-item">
+              <span class="detail-label">👤 Username:</span>
+              <span id="user-username" class="detail-value"></span>
+            </div>
           </div>
-          <button id="logout-btn" class="btn btn-secondary">Logout</button>
+          <div class="profile-actions">
+            <button id="logout-btn" class="btn btn-secondary">🚪 Logout</button>
+          </div>
         </div>
 
         <!-- Auth Forms (shown when not logged in) -->
         <div id="auth-section">
           <div class="account-grid">
             <div class="account-form-container">
+              <div class="feature-icon">🔑</div>
               <h2>Sign In</h2>
               <form class="account-form" id="login-form" novalidate>
                 <div class="form-group">
@@ -68,11 +80,12 @@
                   <input id="login-password" name="password" type="password" required aria-describedby="login-password-error" />
                   <span id="login-password-error" class="error-message" aria-live="polite"></span>
                 </div>
-                <button type="submit" class="btn btn-primary">Sign In</button>
+                <button type="submit" class="btn btn-primary">🚀 Sign In</button>
               </form>
             </div>
 
             <div class="account-form-container">
+              <div class="feature-icon">✨</div>
               <h2>Create Account</h2>
               <form class="account-form" id="register-form" novalidate>
                 <div class="form-group">
@@ -91,7 +104,7 @@
                 </div>
                 <!-- Turnstile CAPTCHA (uncommented - replace sitekey) -->
                 <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-callback="onTurnstileSuccess"></div>
-                <button type="submit" class="btn btn-primary" id="register-submit">Register</button>
+                <button type="submit" class="btn btn-primary" id="register-submit">🎉 Register</button>
               </form>
             </div>
           </div>

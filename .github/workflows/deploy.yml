@@ -37,4 +37,3 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}  # Pulls from secret
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}  # Optional if not in token
           command: pages publish . --project-name soundforyou-site  # Use . for root; change to dist if building
-          # wranglerVersion: "3"  # Pins to stable v3.x

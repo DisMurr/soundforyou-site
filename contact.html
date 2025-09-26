@@ -34,9 +34,11 @@
 
   <main>
     <section class="page-hero">
+      <div class="hero-bg-animation"></div>
       <div class="container">
-        <h1>Contact Us</h1>
-        <p class="page-intro">Tell us about your event and we'll get back within 24 hours.</p>
+        <div class="hero-badge">📞 Get in Touch</div>
+        <h1>Contact <span class="highlight">Us</span></h1>
+        <p class="page-intro">Tell us about your event and we'll get back within 24 hours with a custom quote.</p>
       </div>
     </section>
 
@@ -44,66 +46,70 @@
       <div class="container">
         <div class="contact-grid">
           <div class="contact-info">
+            <div class="feature-icon">🤝</div>
             <h2>We're here to help</h2>
-            <p>Weddings, private parties, corporate AV, or live sound &mdash; we'll tailor a setup for your venue and audience.</p>
+            <p>Weddings, private parties, corporate AV, or live sound &mdash; we'll tailor the perfect setup for your venue and audience.</p>
+            <div class="contact-details">
+              <div class="contact-item">
+                <strong>📧 Email:</strong> frank@soundforyou.ie
+              </div>
+              <div class="contact-item">
+                <strong>📱 Phone:</strong> +353 86 227 8279
+              </div>
+              <div class="contact-item">
+                <strong>⏰ Response:</strong> Within 24 hours
+              </div>
+              <div class="contact-item">
+                <strong>🚚 Coverage:</strong> Dublin & Nationwide
+              </div>
+            </div>
           </div>
 
-          <form class="contact-form" action="/api/contact" method="POST" novalidate>
-            <div class="field-row">
+                    <div class="contact-form">
+            <form id="contactForm" action="/functions/api/contact" method="POST">
               <div class="form-group">
-                <label for="name">Name *</label>
-                <input id="name" name="name" required aria-describedby="name-error" />
-                <span id="name-error" class="error-message" aria-live="polite"></span>
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
               </div>
               <div class="form-group">
-                <label for="email">Email *</label>
-                <input id="email" name="email" type="email" required aria-describedby="email-error" />
-                <span id="email-error" class="error-message" aria-live="polite"></span>
-              </div>
-            </div>
-
-            <div class="field-row">
-              <div class="form-group">
-                <label for="event_date">Event Date</label>
-                <input id="event_date" name="event_date" type="date" />
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
               </div>
               <div class="form-group">
-                <label for="venue">Venue / Location</label>
-                <input id="venue" name="venue" placeholder="Hotel/venue name, town" />
+                <label for="phone">Phone (optional)</label>
+                <input type="tel" id="phone" name="phone">
               </div>
+              <div class="form-group">
+                <label for="eventType">Event Type</label>
+                <select id="eventType" name="eventType">
+                  <option value="">Select event type</option>
+                  <option value="wedding">Wedding</option>
+                  <option value="corporate">Corporate Event</option>
+                  <option value="private">Private Party</option>
+                  <option value="festival">Festival/Public Event</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="date">Event Date</label>
+                <input type="date" id="date" name="date">
+              </div>
+              <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="City or venue">
+              </div>
+              <div class="form-group">
+                <label for="message">Tell us about your event</label>
+                <textarea id="message" name="message" rows="4" placeholder="Expected attendance, indoor/outdoor, any specific requirements..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                Send Message 🚀
+              </button>
+            </form>
+            <div id="successMessage" class="success-message" style="display: none;">
+              ✅ Thanks! We'll get back to you within 24 hours.
             </div>
-
-            <div class="form-group">
-              <label for="audience">Approx. Guests</label>
-              <input id="audience" name="audience" inputmode="numeric" placeholder="e.g., 120" />
-            </div>
-
-            <div class="form-group">
-              <label for="package">Package</label>
-              <select id="package" name="package">
-                <option value="">Select a package (optional)</option>
-                <option>Compact Party</option>
-                <option>Wedding Evening</option>
-                <option>Corporate AV</option>
-                <option>Live Sound</option>
-                <option>Custom</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="message">Message *</label>
-              <textarea id="message" name="message" rows="5" required aria-describedby="message-error" placeholder="Tell us about timings, setup access, special requests&hellip;"></textarea>
-              <span id="message-error" class="error-message" aria-live="polite"></span>
-            </div>
-
-            <!-- Honeypot (spam trap) -->
-            <input type="text" name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;"/>
-
-            <!-- Cloudflare Turnstile container -->
-            <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" style="margin-bottom:12px;"></div>
-
-            <button type="submit" class="btn btn-primary">Send Message</button>
-          </form>
+          </div>
         </div>
       </div>
     </section>
